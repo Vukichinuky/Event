@@ -58,6 +58,32 @@ Admin panel: `http://localhost:3000/admin` (prijava na `/prijava`).
   ingress).
 - `scripts/backup.sh` — dnevni `pg_dump` iz cron-a; postavi `BACKUP_REMOTE` da
   bekap završi VAN Mac Minija.
+- `/api/cron/podsetnici` — dnevni održavajući posao (zaštićen `CRON_SECRET`):
+  podsetnik bendu za upit koji čeka 48h, `NO_RESPONSE` posle 7 dana, link za
+  recenziju paru 2 dana posle svadbe.
+
+Primer crontab unosa:
+
+```cron
+# bekap baze svaki dan u 03:30 — MORA van Mac Minija
+30 3 * * * BACKUP_REMOTE="gdrive:bekap-bendovi" /putanja/do/repo/scripts/backup.sh
+# podsetnici svaki dan u 08:15
+15 8 * * * curl -s -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/podsetnici
+```
+
+## Checklist za lansiranje
+
+1. `.env` na Mac Miniju: pravi `AUTH_SECRET`, `CRON_SECRET`, `SITE_URL`
+   (javni domen), `RESEND_API_KEY` + verifikovan domen za `EMAIL_FROM`,
+   `UPLOAD_DIR=/data/uploads`.
+2. `npm run db:deploy && npm run db:seed` (admin nalog iz `ADMIN_EMAIL`).
+3. `pm2 startOrReload ecosystem.config.cjs && pm2 save`.
+4. Cloudflare Tunnel ingress → `localhost:3000`.
+5. Oba cron unosa (bekap + podsetnici); ručno pokreni bekap jednom i
+   proveri da je fajl stigao na udaljenu lokaciju.
+6. Unesi prvih 10–15 bendova iz svoje mreže (admin → Bendovi → Novi bend):
+   snimci obavezni, cena „od" obavezna, pa tek onda status Objavljen.
+7. Probni upit sa telefona od početka do kraja (forma → mejl → panel).
 
 ## Status razvoja
 
@@ -81,4 +107,7 @@ Plan po nedeljama je u [MASTER_PROMPT.md](./MASTER_PROMPT.md) (Faza 7).
       odbijanje), upit za zauzet datum se odbija, recenzije preko
       reviewToken-a (samo prihvaćen upit, 1:1), admin moderacija,
       javni prikaz sa prosečnom ocenom i odgovorom benda
-- [ ] Nedelja 8 — poliranje + lansiranje
+- [x] Nedelja 8 — poliranje + lansiranje: cron podsetnici (upit bez
+      odgovora 48h → mejl bendu, 7 dana → NO_RESPONSE, link za recenziju
+      paru posle svadbe), 404/error strane, mobile nav, test bekapa,
+      checklist za lansiranje

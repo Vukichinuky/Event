@@ -14,8 +14,8 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen bg-stone-50">
       <header className="border-b border-stone-200 bg-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <nav className="flex items-center gap-6">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-y-1 px-4 py-3">
+          <nav className="flex flex-wrap items-center gap-x-4 gap-y-1">
             <span className="font-semibold text-stone-900">Admin</span>
             <Link
               href="/admin/bendovi"
