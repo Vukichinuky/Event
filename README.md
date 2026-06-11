@@ -69,7 +69,9 @@ Plan po nedeljama je u [MASTER_PROMPT.md](./MASTER_PROMPT.md) (Faza 7).
       paginacija), profil benda (YouTube/IG embed, galerija, cena, CTA),
       admin upravljanje snimcima i slikama (upload na disk), brojač pregleda
       (dedup po sesiji), SEO (meta, JSON-LD, sitemap, robots)
-- [ ] Nedelja 5 — forma za upit + mejl bendu
+- [x] Nedelja 5 — forma za upit (bez registracije, validacija, honeypot,
+      rate-limit 5/h po IP), mejl bendu preko Resend-a, strana potvrde,
+      admin pregled svih upita sa filterima i oznakom „čeka X dana"
 - [ ] Nedelja 6 — bend panel (registracija, preuzimanje profila, statistika)
 - [ ] Nedelja 7 — kalendar + recenzije
 - [ ] Nedelja 8 — poliranje + lansiranje

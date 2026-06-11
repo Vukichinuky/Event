@@ -23,6 +23,12 @@ export default async function AdminLayout({
             >
               Bendovi
             </Link>
+            <Link
+              href="/admin/upiti"
+              className="text-sm text-stone-600 hover:text-stone-900"
+            >
+              Upiti
+            </Link>
           </nav>
           <form
             action={async () => {
