@@ -60,6 +60,13 @@ export default async function PrijavaPage({
         >
           Prijavi se
         </button>
+
+        <p className="text-center text-sm text-stone-500">
+          Imaš bend, a nemaš nalog?{" "}
+          <a href="/registracija" className="underline">
+            Registruj se
+          </a>
+        </p>
       </form>
     </main>
   );

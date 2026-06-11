@@ -10,6 +10,7 @@ export function BandForm({
   selectedGenreIds,
   error,
   saved,
+  showStatus = true,
 }: {
   action: (formData: FormData) => Promise<void>;
   band?: Band;
@@ -17,6 +18,8 @@ export function BandForm({
   selectedGenreIds?: string[];
   error?: string;
   saved?: boolean;
+  // bend ne kontroliše objavu sopstvenog profila — to radi admin
+  showStatus?: boolean;
 }) {
   return (
     <form
@@ -163,21 +166,26 @@ export function BandForm({
         </div>
       </div>
 
-      <div className="space-y-1">
-        <label htmlFor="status" className="text-sm font-medium text-stone-700">
-          Status
-        </label>
-        <select
-          id="status"
-          name="status"
-          defaultValue={band?.status ?? "DRAFT"}
-          className={inputClass}
-        >
-          <option value="DRAFT">Nacrt (nije javno)</option>
-          <option value="PUBLISHED">Objavljen</option>
-          <option value="HIDDEN">Sakriven</option>
-        </select>
-      </div>
+      {showStatus && (
+        <div className="space-y-1">
+          <label
+            htmlFor="status"
+            className="text-sm font-medium text-stone-700"
+          >
+            Status
+          </label>
+          <select
+            id="status"
+            name="status"
+            defaultValue={band?.status ?? "DRAFT"}
+            className={inputClass}
+          >
+            <option value="DRAFT">Nacrt (nije javno)</option>
+            <option value="PUBLISHED">Objavljen</option>
+            <option value="HIDDEN">Sakriven</option>
+          </select>
+        </div>
+      )}
 
       <button
         type="submit"

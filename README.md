@@ -72,6 +72,9 @@ Plan po nedeljama je u [MASTER_PROMPT.md](./MASTER_PROMPT.md) (Faza 7).
 - [x] Nedelja 5 — forma za upit (bez registracije, validacija, honeypot,
       rate-limit 5/h po IP), mejl bendu preko Resend-a, strana potvrde,
       admin pregled svih upita sa filterima i oznakom „čeka X dana"
-- [ ] Nedelja 6 — bend panel (registracija, preuzimanje profila, statistika)
+- [x] Nedelja 6 — bend panel: registracija (auto-preuzimanje „siroče"
+      profila po kontakt mejlu), uređivanje profila/snimaka/slika bez
+      kontrole objave, upiti sa Prihvati/Odbij (+ vreme prvog odgovora),
+      statistika (pregledi, upiti, prihvaćene svadbe), admin dodela naloga
 - [ ] Nedelja 7 — kalendar + recenzije
 - [ ] Nedelja 8 — poliranje + lansiranje
