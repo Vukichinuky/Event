@@ -65,7 +65,10 @@ Plan po nedeljama je u [MASTER_PROMPT.md](./MASTER_PROMPT.md) (Faza 7).
 
 - [x] Nedelja 1–2 — temelj: Next.js, Prisma šema (cela baza), NextAuth (admin),
       admin CRUD bendova (uklj. „siroče“ profile), deploy/bekap skripte
-- [ ] Nedelja 3–4 — javni katalog (lista + filteri žanr/cena, profil benda, SEO)
+- [x] Nedelja 3–4 — javni katalog: lista + filteri (žanr/budžet u URL-u,
+      paginacija), profil benda (YouTube/IG embed, galerija, cena, CTA),
+      admin upravljanje snimcima i slikama (upload na disk), brojač pregleda
+      (dedup po sesiji), SEO (meta, JSON-LD, sitemap, robots)
 - [ ] Nedelja 5 — forma za upit + mejl bendu
 - [ ] Nedelja 6 — bend panel (registracija, preuzimanje profila, statistika)
 - [ ] Nedelja 7 — kalendar + recenzije

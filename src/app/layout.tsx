@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
   title: {
     default: "Svadbeni bendovi — pronađi i poslušaj bend za svadbu",
     template: "%s | Svadbeni bendovi",

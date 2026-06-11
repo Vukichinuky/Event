@@ -77,6 +77,7 @@ export async function createBand(formData: FormData) {
   });
 
   revalidatePath("/admin/bendovi");
+  revalidatePath("/");
   redirect(`/admin/bendovi/${band.id}`);
 }
 
@@ -88,16 +89,19 @@ export async function updateBand(bandId: string, formData: FormData) {
   }
 
   const { genreIds, ...fields } = data;
+  const slug = await uniqueSlug(fields.name, bandId);
   await prisma.band.update({
     where: { id: bandId },
     data: {
       ...fields,
-      slug: await uniqueSlug(fields.name, bandId),
+      slug,
       genres: { set: genreIds.map((id) => ({ id })) },
     },
   });
 
   revalidatePath("/admin/bendovi");
+  revalidatePath("/");
+  revalidatePath(`/bend/${slug}`);
   redirect(`/admin/bendovi/${bandId}?sacuvano=1`);
 }
 
@@ -105,5 +109,6 @@ export async function deleteBand(bandId: string) {
   await requireAdmin();
   await prisma.band.delete({ where: { id: bandId } });
   revalidatePath("/admin/bendovi");
+  revalidatePath("/");
   redirect("/admin/bendovi");
 }
