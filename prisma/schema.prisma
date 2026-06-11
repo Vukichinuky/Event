@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  BAND
+}
+
+enum BandStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+}
+
+enum VideoPlatform {
+  YOUTUBE
+  INSTAGRAM
+}
+
+enum InquiryStatus {
+  NEW
+  ACCEPTED
+  DECLINED
+  NO_RESPONSE
+}
+
+enum UnavailableReason {
+  MANUAL
+  BOOKED
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(BAND)
+  band         Band?
+  createdAt    DateTime @default(now())
+}
+
+// userId je opciono: admin pravi "siroče" profil pre nego što bend ima nalog
+model Band {
+  id           String     @id @default(cuid())
+  userId       String?    @unique
+  user         User?      @relation(fields: [userId], references: [id])
+  name         String
+  slug         String     @unique
+  description  String     @default("")
+  // sedište benda — čisto informativno, bend svira svuda
+  city         String     @default("")
+  contactEmail String?
+  contactPhone String?
+  priceFrom    Int
+  priceTo      Int?
+  coverImage   String?
+  status       BandStatus @default(DRAFT)
+  viewCount    Int        @default(0)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  genres           Genre[]
+  videos           Video[]
+  photos           Photo[]
+  inquiries        Inquiry[]
+  unavailableDates UnavailableDate[]
+  reviews          Review[]
+}
+
+model Genre {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+  bands Band[]
+}
+
+model Video {
+  id       String        @id @default(cuid())
+  bandId   String
+  band     Band          @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  url      String
+  platform VideoPlatform
+  order    Int           @default(0)
+}
+
+model Photo {
+  id     String @id @default(cuid())
+  bandId String
+  band   Band   @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  path   String
+  order  Int    @default(0)
+}
+
+model Inquiry {
+  id          String        @id @default(cuid())
+  bandId      String
+  band        Band          @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  clientName  String
+  phone       String
+  email       String
+  eventDate   DateTime      @db.Date
+  eventCity   String
+  guestCount  Int?
+  message     String        @default("")
+  status      InquiryStatus @default(NEW)
+  // token preko kog par (i samo on) može da ostavi recenziju
+  reviewToken String        @unique @default(cuid())
+  respondedAt DateTime?
+  createdAt   DateTime      @default(now())
+  review      Review?
+}
+
+model UnavailableDate {
+  id     String            @id @default(cuid())
+  bandId String
+  band   Band              @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  date   DateTime          @db.Date
+  reason UnavailableReason @default(MANUAL)
+
+  @@unique([bandId, date])
+}
+
+model Review {
+  id        String       @id @default(cuid())
+  bandId    String
+  band      Band         @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  inquiryId String       @unique
+  inquiry   Inquiry      @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  rating    Int
+  text      String       @default("")
+  status    ReviewStatus @default(PENDING)
+  bandReply String?
+  createdAt DateTime     @default(now())
+}
