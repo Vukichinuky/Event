@@ -76,5 +76,9 @@ Plan po nedeljama je u [MASTER_PROMPT.md](./MASTER_PROMPT.md) (Faza 7).
       profila po kontakt mejlu), uređivanje profila/snimaka/slika bez
       kontrole objave, upiti sa Prihvati/Odbij (+ vreme prvog odgovora),
       statistika (pregledi, upiti, prihvaćene svadbe), admin dodela naloga
-- [ ] Nedelja 7 — kalendar + recenzije
+- [x] Nedelja 7 — kalendar dostupnosti (klik-na-zauzeto, mesečna
+      navigacija), auto-blok datuma na prihvaćen upit (+ oslobađanje na
+      odbijanje), upit za zauzet datum se odbija, recenzije preko
+      reviewToken-a (samo prihvaćen upit, 1:1), admin moderacija,
+      javni prikaz sa prosečnom ocenom i odgovorom benda
 - [ ] Nedelja 8 — poliranje + lansiranje

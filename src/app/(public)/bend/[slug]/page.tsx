@@ -14,6 +14,11 @@ async function getBand(slug: string) {
       genres: true,
       videos: { orderBy: [{ order: "asc" }, { id: "asc" }] },
       photos: { orderBy: [{ order: "asc" }, { id: "asc" }] },
+      reviews: {
+        where: { status: "APPROVED" },
+        orderBy: { createdAt: "desc" },
+        include: { inquiry: { select: { clientName: true } } },
+      },
     },
   });
 }
@@ -54,6 +59,11 @@ export default async function BendPage({
     .map((video) => ({ ...video, parsed: parseVideoUrl(video.url) }))
     .filter((video) => video.parsed !== null);
 
+  const avgRating =
+    band.reviews.length > 0
+      ? band.reviews.reduce((sum, r) => sum + r.rating, 0) / band.reviews.length
+      : null;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "MusicGroup",
@@ -61,6 +71,16 @@ export default async function BendPage({
     description: band.description || undefined,
     image: band.coverImage || undefined,
     genre: band.genres.map((g) => g.name),
+    ...(avgRating
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: Number(avgRating.toFixed(1)),
+            reviewCount: band.reviews.length,
+            bestRating: 5,
+          },
+        }
+      : {}),
   };
 
   return (
@@ -93,6 +113,13 @@ export default async function BendPage({
           {band.city ? `${band.city} · ` : ""}svira na celoj teritoriji BiH i
           šire
         </p>
+        {avgRating && (
+          <p className="text-sm text-stone-700">
+            <span className="text-amber-500">★</span>{" "}
+            <strong>{avgRating.toFixed(1)}</strong> ({band.reviews.length}{" "}
+            {band.reviews.length === 1 ? "recenzija" : "recenzije"})
+          </p>
+        )}
         <div className="flex items-center gap-4">
           <span className="text-lg font-semibold text-stone-900">
             {formatPriceRange(band.priceFrom, band.priceTo)}
@@ -164,6 +191,53 @@ export default async function BendPage({
           <p className="whitespace-pre-line leading-relaxed text-stone-700">
             {band.description}
           </p>
+        </section>
+      )}
+
+      {band.reviews.length > 0 && (
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold text-stone-900">
+            Recenzije parova
+          </h2>
+          <ul className="space-y-4">
+            {band.reviews.map((review) => (
+              <li
+                key={review.id}
+                className="space-y-2 rounded-xl border border-stone-200 bg-white p-4"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span
+                    className="text-amber-500"
+                    aria-label={`Ocena ${review.rating} od 5`}
+                  >
+                    {"★".repeat(review.rating)}
+                    <span className="text-stone-300">
+                      {"★".repeat(5 - review.rating)}
+                    </span>
+                  </span>
+                  <span className="text-xs text-stone-400">
+                    {review.inquiry.clientName} ·{" "}
+                    {review.createdAt.toLocaleDateString("sr-Latn-BA")}
+                  </span>
+                </div>
+                {review.text && (
+                  <p className="text-sm leading-relaxed text-stone-700">
+                    {review.text}
+                  </p>
+                )}
+                {review.bandReply && (
+                  <div className="rounded-md bg-stone-50 p-3">
+                    <p className="text-xs font-medium text-stone-500">
+                      Odgovor benda
+                    </p>
+                    <p className="mt-1 text-sm text-stone-700">
+                      {review.bandReply}
+                    </p>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 

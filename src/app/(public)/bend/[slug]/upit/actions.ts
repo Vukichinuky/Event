@@ -73,6 +73,16 @@ export async function submitInquiry(
     return { error: "Datum svadbe ne može biti u prošlosti." };
   }
 
+  // ne troši vreme para na bend koji je već zauzet tog datuma
+  const taken = await prisma.unavailableDate.findUnique({
+    where: { bandId_date: { bandId: band.id, date: eventDate } },
+  });
+  if (taken) {
+    return {
+      error: `${band.name} je već zauzet tog datuma. Probaj drugi datum ili pogledaj ostale bendove.`,
+    };
+  }
+
   await prisma.inquiry.create({
     data: {
       bandId: band.id,

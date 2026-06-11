@@ -32,6 +32,18 @@ export default async function DashboardLayout({
               Upiti
             </Link>
             <Link
+              href="/dashboard/kalendar"
+              className="text-sm text-stone-600 hover:text-stone-900"
+            >
+              Kalendar
+            </Link>
+            <Link
+              href="/dashboard/recenzije"
+              className="text-sm text-stone-600 hover:text-stone-900"
+            >
+              Recenzije
+            </Link>
+            <Link
               href="/dashboard/profil"
               className="text-sm text-stone-600 hover:text-stone-900"
             >

@@ -41,7 +41,10 @@ export default async function UpitiPage({
     : {};
   const inquiries = await prisma.inquiry.findMany({
     where,
-    include: { band: { select: { name: true, slug: true } } },
+    include: {
+      band: { select: { name: true, slug: true } },
+      review: { select: { status: true } },
+    },
     orderBy: { createdAt: "desc" },
   });
 
@@ -134,6 +137,25 @@ export default async function UpitiPage({
                       >
                         {STATUS_LABEL[inquiry.status]}
                       </span>
+                      {inquiry.status === "ACCEPTED" &&
+                        (inquiry.review ? (
+                          <span className="mt-1 block text-xs text-stone-400">
+                            recenzija: {inquiry.review.status === "PENDING"
+                              ? "čeka"
+                              : inquiry.review.status === "APPROVED"
+                                ? "objavljena"
+                                : "odbijena"}
+                          </span>
+                        ) : (
+                          <span className="mt-1 block text-xs">
+                            <Link
+                              href={`/recenzija/${inquiry.reviewToken}`}
+                              className="text-stone-400 underline"
+                            >
+                              link za recenziju
+                            </Link>
+                          </span>
+                        ))}
                     </td>
                   </tr>
                 );

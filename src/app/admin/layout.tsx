@@ -29,6 +29,12 @@ export default async function AdminLayout({
             >
               Upiti
             </Link>
+            <Link
+              href="/admin/recenzije"
+              className="text-sm text-stone-600 hover:text-stone-900"
+            >
+              Recenzije
+            </Link>
           </nav>
           <form
             action={async () => {
