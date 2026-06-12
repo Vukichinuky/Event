@@ -85,6 +85,7 @@ Primer crontab unosa:
 
 1. `.env` na Mac Miniju: pravi `AUTH_SECRET`, `CRON_SECRET`, `SITE_URL`
    (javni domen), `RESEND_API_KEY` + verifikovan domen za `EMAIL_FROM`,
+   opciono `ADMIN_EMAIL_2`/`ADMIN_PASSWORD_2` za drugog admina,
    `UPLOAD_DIR=/data/uploads`.
 2. `npm run db:deploy && npm run db:seed` (admin nalog iz `ADMIN_EMAIL`).
 3. `pm2 startOrReload ecosystem.config.cjs && pm2 save`.

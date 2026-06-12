@@ -46,25 +46,36 @@ async function main() {
     });
   }
 
-  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  const password = process.env.ADMIN_PASSWORD;
-  if (!email || !password) {
+  // do dva admin naloga: ADMIN_EMAIL/ADMIN_PASSWORD i ADMIN_EMAIL_2/ADMIN_PASSWORD_2
+  const admins = [
+    { email: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD },
+    {
+      email: process.env.ADMIN_EMAIL_2,
+      password: process.env.ADMIN_PASSWORD_2,
+    },
+  ];
+
+  for (const admin of admins) {
+    const email = admin.email?.trim().toLowerCase();
+    if (!email || !admin.password) continue;
+
+    await prisma.user.upsert({
+      where: { email },
+      update: { role: "ADMIN" },
+      create: {
+        email,
+        passwordHash: await bcrypt.hash(admin.password, 12),
+        role: "ADMIN",
+      },
+    });
+    console.log(`Admin nalog spreman: ${email}`);
+  }
+
+  if (admins.every((a) => !a.email || !a.password)) {
     console.log(
       "ADMIN_EMAIL/ADMIN_PASSWORD nisu postavljeni — preskačem kreiranje admina.",
     );
-    return;
   }
-
-  await prisma.user.upsert({
-    where: { email },
-    update: {},
-    create: {
-      email,
-      passwordHash: await bcrypt.hash(password, 12),
-      role: "ADMIN",
-    },
-  });
-  console.log(`Admin nalog spreman: ${email}`);
 }
 
 main()
