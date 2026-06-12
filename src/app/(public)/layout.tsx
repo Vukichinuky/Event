@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AuthCta } from "@/components/auth-cta";
 
 function Logo({ dark = false }: { dark?: boolean }) {
   return (
@@ -31,12 +32,7 @@ export default function PublicLayout({
       <header className="sticky top-0 z-40 border-b border-stone-200/60 bg-cream/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
           <Logo />
-          <Link
-            href="/prijava"
-            className="rounded-full border border-stone-300/80 bg-white/60 px-4 py-1.5 text-sm font-medium text-ink transition hover:border-gold hover:text-gold-dark"
-          >
-            Za ponuđače
-          </Link>
+          <AuthCta />
         </div>
       </header>
 

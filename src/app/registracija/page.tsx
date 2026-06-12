@@ -1,10 +1,16 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 import { ui } from "@/lib/ui";
 import { RegisterForm } from "./register-form";
 
 export const metadata = { title: "Registracija" };
 
-export default function RegistracijaPage() {
+export default async function RegistracijaPage() {
+  // već ulogovan — pravo u panel
+  const session = await auth();
+  if (session?.user) redirect("/preusmeri");
+
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-cream p-4">
       <div

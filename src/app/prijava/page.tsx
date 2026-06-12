@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 import { ui } from "@/lib/ui";
 import { loginAction } from "./actions";
 
@@ -10,6 +12,10 @@ export default async function PrijavaPage({
   searchParams: Promise<{ greska?: string }>;
 }) {
   const { greska } = await searchParams;
+
+  // već ulogovan — pravo u panel
+  const session = await auth();
+  if (session?.user) redirect("/preusmeri");
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-cream p-4">
