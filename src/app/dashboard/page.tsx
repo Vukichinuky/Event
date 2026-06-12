@@ -4,6 +4,7 @@ import { requireBand } from "@/lib/require-auth";
 import { BandForm } from "@/app/admin/bendovi/band-form";
 import { createOwnBand } from "./actions";
 import { CopyField } from "@/components/copy-field";
+import { bandPath } from "@/lib/band-path";
 
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
@@ -17,11 +18,14 @@ export default async function DashboardPage({
 
   // bend bez profila — napravi svoj (DRAFT, admin objavljuje)
   if (!band) {
-    const genres = await prisma.genre.findMany({ orderBy: { name: "asc" } });
+    const [genres, categories] = await Promise.all([
+      prisma.genre.findMany({ orderBy: { name: "asc" } }),
+      prisma.category.findMany({ orderBy: { order: "asc" } }),
+    ]);
     return (
       <div className="space-y-4">
         <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">
-          Dobrodošao! Napravi profil svog benda
+          Dobrodošao! Napravi svoj profil
         </h1>
         <p className="max-w-2xl text-sm text-stone-500">
           Popuni osnovne podatke — snimke i slike dodaješ posle. Profil ide
@@ -31,6 +35,7 @@ export default async function DashboardPage({
         <BandForm
           action={createOwnBand}
           genres={genres}
+          categories={categories}
           error={greska}
           showStatus={false}
         />
@@ -58,7 +63,7 @@ export default async function DashboardPage({
     { label: "Pregleda profila", value: band.viewCount },
     { label: "Upita ukupno", value: total },
     { label: "Upita u zadnjih 30 dana", value: lastMonth },
-    { label: "Prihvaćenih svadbi", value: accepted },
+    { label: "Prihvaćenih termina", value: accepted },
   ];
 
   return (
@@ -67,7 +72,7 @@ export default async function DashboardPage({
         <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Pregled</h1>
         {band.status === "PUBLISHED" ? (
           <Link
-            href={`/bend/${band.slug}`}
+            href={bandPath(band)}
             className="text-sm font-medium text-gold-dark underline-offset-4 transition hover:underline"
           >
             Pogledaj svoj javni profil →
@@ -114,7 +119,7 @@ export default async function DashboardPage({
             koji ga otvori je potencijalni upit.
           </p>
           <CopyField
-            value={`${process.env.SITE_URL ?? "http://localhost:3000"}/bend/${band.slug}`}
+            value={`${process.env.SITE_URL ?? "http://localhost:3000"}${bandPath(band)}`}
           />
         </section>
       )}

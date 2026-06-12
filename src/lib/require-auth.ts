@@ -18,7 +18,10 @@ export async function requireAdmin() {
 export async function requireBand() {
   const user = await requireUser();
   if (user.role !== "BAND") redirect("/admin");
-  const band = await prisma.band.findUnique({ where: { userId: user.id } });
+  const band = await prisma.band.findUnique({
+    where: { userId: user.id },
+    include: { category: true },
+  });
   return { user, band };
 }
 

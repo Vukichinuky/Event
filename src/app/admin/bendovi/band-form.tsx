@@ -1,10 +1,11 @@
 import { ui } from "@/lib/ui";
-import type { Band, Genre } from "@/generated/prisma/client";
+import type { Band, Genre, Category } from "@/generated/prisma/client";
 
 export function BandForm({
   action,
   band,
   genres,
+  categories,
   selectedGenreIds,
   error,
   saved,
@@ -13,10 +14,11 @@ export function BandForm({
   action: (formData: FormData) => Promise<void>;
   band?: Band;
   genres: Genre[];
+  categories: Category[];
   selectedGenreIds?: string[];
   error?: string;
   saved?: boolean;
-  // bend ne kontroliše objavu sopstvenog profila — to radi admin
+  // ponuđač ne kontroliše objavu sopstvenog profila — to radi admin
   showStatus?: boolean;
 }) {
   return (
@@ -33,8 +35,30 @@ export function BandForm({
       )}
 
       <div className="space-y-1.5">
+        <label htmlFor="categoryId" className={ui.label}>
+          Kategorija *
+        </label>
+        <select
+          id="categoryId"
+          name="categoryId"
+          required
+          defaultValue={band?.categoryId ?? ""}
+          className={ui.input}
+        >
+          <option value="" disabled>
+            Izaberi kategoriju…
+          </option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="space-y-1.5">
         <label htmlFor="name" className={ui.label}>
-          Ime benda *
+          Naziv *
         </label>
         <input
           id="name"
@@ -60,7 +84,7 @@ export function BandForm({
       </div>
 
       <fieldset className="space-y-2.5">
-        <legend className={ui.label}>Žanrovi</legend>
+        <legend className={ui.label}>Žanrovi (samo za bendove)</legend>
         <div className="flex flex-wrap gap-2">
           {genres.map((genre) => (
             <label
@@ -83,7 +107,7 @@ export function BandForm({
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-1.5">
           <label htmlFor="city" className={ui.label}>
-            Grad (sedište — informativno, bend svira svuda)
+            Grad (sedište — informativno, usluga važi svuda)
           </label>
           <input
             id="city"

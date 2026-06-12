@@ -12,11 +12,11 @@ export default async function AdminLayout({
 
   return (
     <PanelShell
-      brand="Svadbeni bendovi"
+      brand="Sve za svadbu"
       badge="Admin"
       email={user.email}
       links={[
-        { href: "/admin/bendovi", label: "Bendovi" },
+        { href: "/admin/bendovi", label: "Ponuđači" },
         { href: "/admin/upiti", label: "Upiti" },
         { href: "/admin/recenzije", label: "Recenzije" },
       ]}

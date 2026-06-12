@@ -26,7 +26,7 @@ export default async function BendProfilPage({
     );
   }
 
-  const [band, genres] = await Promise.all([
+  const [band, genres, categories] = await Promise.all([
     prisma.band.findUnique({
       where: { id: ownBand.id },
       include: {
@@ -36,6 +36,7 @@ export default async function BendProfilPage({
       },
     }),
     prisma.genre.findMany({ orderBy: { name: "asc" } }),
+    prisma.category.findMany({ orderBy: { order: "asc" } }),
   ]);
   if (!band) return null;
 
@@ -50,6 +51,7 @@ export default async function BendProfilPage({
         action={updateOwnProfile}
         band={band}
         genres={genres}
+        categories={categories}
         selectedGenreIds={band.genres.map((g) => g.id)}
         error={greska}
         saved={sacuvano === "1"}

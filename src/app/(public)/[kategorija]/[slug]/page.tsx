@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { parseVideoUrl } from "@/lib/video";
@@ -8,12 +8,14 @@ import { formatPriceRange, formatKM } from "@/lib/format";
 import { TrackView } from "@/components/track-view";
 import { Reveal } from "@/components/reveal";
 import { ui } from "@/lib/ui";
+import { bandPath } from "@/lib/band-path";
 
 async function getBand(slug: string) {
   return prisma.band.findUnique({
     where: { slug },
     include: {
       genres: true,
+      category: true,
       videos: { orderBy: [{ order: "asc" }, { id: "asc" }] },
       photos: { orderBy: [{ order: "asc" }, { id: "asc" }] },
       reviews: {
@@ -28,19 +30,23 @@ async function getBand(slug: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ kategorija: string; slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const band = await getBand(slug);
   if (!band || band.status !== "PUBLISHED") return {};
+  const kind =
+    band.category.slug === "bendovi"
+      ? "bend za svadbu"
+      : `${band.category.name.toLowerCase()} za svadbu`;
   const description =
     band.description.slice(0, 155) ||
-    `${band.name} — bend za svadbu. Poslušaj snimke, pogledaj cene i pošalji upit.`;
+    `${band.name} — ${kind}. Pogledaj ponudu, cene i pošalji upit.`;
   return {
-    title: `${band.name} — bend za svadbu`,
+    title: `${band.name} — ${kind}`,
     description,
     openGraph: {
-      title: `${band.name} — bend za svadbu`,
+      title: `${band.name} — ${kind}`,
       description,
       images: band.coverImage ? [band.coverImage] : [],
     },
@@ -67,12 +73,16 @@ function SectionTitle({
 export default async function BendPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ kategorija: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { kategorija, slug } = await params;
   const band = await getBand(slug);
   // DRAFT i HIDDEN profili za javnost ne postoje
   if (!band || band.status !== "PUBLISHED") notFound();
+  // kanonska putanja po kategoriji profila
+  if (band.category.slug !== kategorija) redirect(bandPath(band));
+
+  const isBend = band.category.slug === "bendovi";
 
   const videos = band.videos
     .map((video) => ({ ...video, parsed: parseVideoUrl(video.url) }))
@@ -85,7 +95,7 @@ export default async function BendPage({
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "MusicGroup",
+    "@type": isBend ? "MusicGroup" : "LocalBusiness",
     name: band.name,
     description: band.description || undefined,
     image: band.coverImage || undefined,
@@ -153,18 +163,20 @@ export default async function BendPage({
             )}
             <div className="min-w-0 animate-[rise_0.5s_ease-out_0.1s_both] space-y-4">
               <div className="flex flex-wrap items-center gap-2">
-                {band.genres.map((g) => (
-                  <span key={g.id} className={ui.chip}>
-                    {g.name}
-                  </span>
-                ))}
+                <span className={ui.chip}>{band.category.name}</span>
+                {isBend &&
+                  band.genres.map((g) => (
+                    <span key={g.id} className={ui.chip}>
+                      {g.name}
+                    </span>
+                  ))}
               </div>
               <h1 className="font-display text-4xl leading-tight font-semibold tracking-tight text-cream sm:text-5xl">
                 {band.name}
               </h1>
               <p className="text-sm text-stone-400">
-                {band.city ? `${band.city} · ` : ""}svira na celoj teritoriji
-                BiH i šire
+                {band.city ? `${band.city} · ` : ""}
+                {isBend ? "svira" : "dostupno"} na celoj teritoriji BiH i šire
               </p>
               {avgRating && (
                 <p className="flex items-center gap-2 text-sm">
@@ -186,7 +198,7 @@ export default async function BendPage({
                   {formatPriceRange(band.priceFrom, band.priceTo)}
                 </span>
                 <Link
-                  href={`/bend/${band.slug}/upit`}
+                  href={`${bandPath(band)}/upit`}
                   className={`hidden sm:inline-flex ${ui.btnGold}`}
                 >
                   Pošalji upit
@@ -202,7 +214,10 @@ export default async function BendPage({
         {videos.length > 0 && (
           <Reveal>
           <section className="space-y-6">
-            <SectionTitle eyebrow="Snimci" title="Poslušaj kako sviraju" />
+            <SectionTitle
+              eyebrow="Snimci"
+              title={isBend ? "Poslušaj kako sviraju" : "Pogledaj ih u akciji"}
+            />
             <div className="grid gap-5 sm:grid-cols-2">
               {videos.map((video) => (
                 <div
@@ -255,7 +270,10 @@ export default async function BendPage({
         {band.description && (
           <Reveal>
           <section className="space-y-6">
-            <SectionTitle eyebrow="O bendu" title="Ko su oni" />
+            <SectionTitle
+              eyebrow={isBend ? "O bendu" : "O ponudi"}
+              title="Ko su oni"
+            />
             <p className="max-w-3xl text-base leading-relaxed whitespace-pre-line text-stone-600">
               {band.description}
             </p>
@@ -325,7 +343,7 @@ export default async function BendPage({
             <h2 className="relative mx-auto mt-4 max-w-lg font-display text-3xl font-semibold text-cream">
               Pitaj {band.name}{" "}
               <em className={`font-light italic ${ui.goldText}`}>
-                da li je slobodan
+                da li je slobodan termin
               </em>{" "}
               za tvoju svadbu
             </h2>
@@ -333,7 +351,7 @@ export default async function BendPage({
               Bez registracije · bend ti se javlja direktno
             </p>
             <div className="relative mt-8">
-              <Link href={`/bend/${band.slug}/upit`} className={ui.btnGold}>
+              <Link href={`${bandPath(band)}/upit`} className={ui.btnGold}>
                 Pošalji upit · {formatPriceRange(band.priceFrom, band.priceTo)}
               </Link>
             </div>
@@ -344,7 +362,7 @@ export default async function BendPage({
       {/* Lepljivo dugme na mobilnom — prioritet je konverzija ka upitu */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-stone-200/60 bg-white/85 p-3 backdrop-blur-xl sm:hidden">
         <Link
-          href={`/bend/${band.slug}/upit`}
+          href={`${bandPath(band)}/upit`}
           className={`w-full ${ui.btnGold}`}
         >
           Pošalji upit · od {formatKM(band.priceFrom)}

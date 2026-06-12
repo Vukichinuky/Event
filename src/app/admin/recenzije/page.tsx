@@ -38,7 +38,7 @@ export default async function AdminRecenzijePage({
   const reviews = await prisma.review.findMany({
     where,
     include: {
-      band: { select: { name: true, slug: true } },
+      band: { select: { name: true, slug: true, category: { select: { slug: true } } } },
       inquiry: { select: { clientName: true, eventDate: true, email: true } },
     },
     orderBy: { createdAt: "desc" },
@@ -82,7 +82,7 @@ export default async function AdminRecenzijePage({
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="text-sm">
                   <Link
-                    href={`/bend/${review.band.slug}`}
+                    href={`/${review.band.category.slug}/${review.band.slug}`}
                     className="font-medium text-stone-900 underline-offset-2 hover:underline"
                   >
                     {review.band.name}

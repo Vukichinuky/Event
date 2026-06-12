@@ -1,8 +1,10 @@
-# Svadbeni bendovi
+# Sve za svadbu
 
-Kustosiran katalog svadbenih bendova za BiH. Par pronađe bend, posluša snimke i
-pošalje upit — bez registracije. Bend dobija upite, statistiku i upravlja
-profilom. Kompletna specifikacija: [MASTER_PROMPT.md](./MASTER_PROMPT.md).
+Kustosiran katalog svadbenih usluga za BiH — bendovi, fotografi, prostori,
+dekoracije, ketering, prstenje, pozivnice, prevoz, momačko/devojačko i magazin.
+Par pronađe ponudu, pogleda snimke/galeriju i pošalje upit — bez registracije.
+Ponuđač dobija upite, statistiku i upravlja profilom. Originalna specifikacija
+(fokus na bendove): [MASTER_PROMPT.md](./MASTER_PROMPT.md).
 
 **Stack:** Next.js (App Router) · PostgreSQL · Prisma 7 · NextAuth (Auth.js v5) ·
 self-host na Mac Mini preko Cloudflare Tunnel.

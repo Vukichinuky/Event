@@ -8,16 +8,19 @@ export default async function NoviBendPage({
   searchParams: Promise<{ greska?: string }>;
 }) {
   const { greska } = await searchParams;
-  const genres = await prisma.genre.findMany({ orderBy: { name: "asc" } });
+  const [genres, categories] = await Promise.all([
+    prisma.genre.findMany({ orderBy: { name: "asc" } }),
+    prisma.category.findMany({ orderBy: { order: "asc" } }),
+  ]);
 
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Novi bend</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Novi profil</h1>
       <p className="text-sm text-stone-500">
-        Bend ne mora imati nalog — profil se vodi kao „siroče“ dok ga bend ne
+        Ponuđač ne mora imati nalog — profil se vodi kao „siroče“ dok ga ne
         preuzme.
       </p>
-      <BandForm action={createBand} genres={genres} error={greska} />
+      <BandForm action={createBand} genres={genres} categories={categories} error={greska} />
     </div>
   );
 }

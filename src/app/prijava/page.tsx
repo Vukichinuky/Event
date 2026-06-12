@@ -23,7 +23,7 @@ export default async function PrijavaPage({
             ♫
           </span>
           <span className="font-display text-xl font-semibold tracking-tight text-ink">
-            Svadbeni bendovi
+            Sve za svadbu
           </span>
         </Link>
 
@@ -32,7 +32,7 @@ export default async function PrijavaPage({
             <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">
               Prijava
             </h1>
-            <p className="text-sm text-stone-500">Panel za bendove i admina.</p>
+            <p className="text-sm text-stone-500">Panel za ponuđače i admina.</p>
           </div>
 
           {greska && (
@@ -74,7 +74,7 @@ export default async function PrijavaPage({
           </button>
 
           <p className="text-center text-sm text-stone-500">
-            Imaš bend, a nemaš nalog?{" "}
+            Nemaš nalog?{" "}
             <Link
               href="/registracija"
               className="font-medium text-gold-dark underline-offset-4 hover:underline"

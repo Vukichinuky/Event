@@ -62,7 +62,7 @@ export default async function RecenzijaPage({
         <header className="animate-[rise_0.5s_ease-out_both] space-y-2">
           <p className={ui.eyebrow}>Recenzija</p>
           <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-            Kako je sviralo — {inquiry.band.name}?
+            Kako je bilo — {inquiry.band.name}?
           </h1>
           <p className="text-sm text-stone-500">
             Svadba {inquiry.eventDate.toLocaleDateString("sr-Latn-BA")} ·{" "}

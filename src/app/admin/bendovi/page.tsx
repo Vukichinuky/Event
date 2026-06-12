@@ -10,32 +10,33 @@ const STATUS_LABEL: Record<string, string> = {
 export default async function BendoviPage() {
   const bands = await prisma.band.findMany({
     orderBy: { createdAt: "desc" },
-    include: { user: { select: { email: true } }, genres: true },
+    include: { user: { select: { email: true } }, genres: true, category: true },
   });
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Bendovi</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Ponuđači</h1>
         <Link
           href="/admin/bendovi/novi"
           className="cursor-pointer rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-px hover:bg-stone-800"
         >
-          + Novi bend
+          + Novi profil
         </Link>
       </div>
 
       {bands.length === 0 ? (
         <p className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-10 text-center text-sm text-stone-500">
-          Još nema bendova. Dodaj prvi bend — može i kao „siroče“ profil, pre
-          nego što bend ima svoj nalog.
+          Još nema profila. Dodaj prvi — može i kao „siroče“ profil, pre nego
+          što ponuđač ima svoj nalog.
         </p>
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-stone-200/70 bg-white shadow-soft">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-stone-200 text-stone-500">
               <tr>
-                <th className="px-4 py-3 font-medium">Ime</th>
+                <th className="px-4 py-3 font-medium">Naziv</th>
+                <th className="px-4 py-3 font-medium">Kategorija</th>
                 <th className="px-4 py-3 font-medium">Žanrovi</th>
                 <th className="px-4 py-3 font-medium">Cena (KM)</th>
                 <th className="px-4 py-3 font-medium">Status</th>
@@ -56,6 +57,9 @@ export default async function BendoviPage() {
                     {band.city && (
                       <span className="ml-2 text-stone-400">({band.city})</span>
                     )}
+                  </td>
+                  <td className="px-4 py-3 text-stone-600">
+                    {band.category.name}
                   </td>
                   <td className="px-4 py-3 text-stone-600">
                     {band.genres.map((g) => g.name).join(", ") || "—"}

@@ -15,7 +15,7 @@ function Logo({ dark = false }: { dark?: boolean }) {
           dark ? "text-cream" : "text-ink"
         }`}
       >
-        Svadbeni bendovi
+        Sve za svadbu
       </span>
     </Link>
   );
@@ -35,7 +35,7 @@ export default function PublicLayout({
             href="/prijava"
             className="rounded-full border border-stone-300/80 bg-white/60 px-4 py-1.5 text-sm font-medium text-ink transition hover:border-gold hover:text-gold-dark"
           >
-            Za bendove
+            Za ponuđače
           </Link>
         </div>
       </header>
@@ -51,8 +51,8 @@ export default function PublicLayout({
           <div className="space-y-3">
             <Logo dark />
             <p className="max-w-sm text-sm leading-relaxed text-stone-400">
-              Poslušaj kako sviraju, uporedi cene i pošalji upit — bez
-              registracije. Bendovi sviraju na celoj teritoriji BiH i šire.
+              Bendovi, fotografi, prostori, dekoracije i sve ostalo za tvoj dan.
+              Uporedi cene i pošalji upit — bez registracije.
             </p>
           </div>
           <div className="flex items-center gap-6 text-sm text-stone-400">
@@ -60,7 +60,7 @@ export default function PublicLayout({
               href="/registracija"
               className="transition hover:text-gold"
             >
-              Registruj svoj bend
+              Registruj svoju ponudu
             </Link>
             <Link href="/prijava" className="transition hover:text-gold">
               Prijava
@@ -69,7 +69,7 @@ export default function PublicLayout({
         </div>
         <div className="relative border-t border-white/5">
           <p className="mx-auto max-w-6xl px-4 py-4 text-xs text-stone-600 sm:px-6">
-            ♫ Svadbeni bendovi — katalog svadbenih bendova za BiH
+            ♫ Sve za svadbu — katalog svadbenih usluga za BiH
           </p>
         </div>
       </footer>

@@ -19,17 +19,19 @@ export default async function UrediBendPage({
   const { id } = await params;
   const { greska, sacuvano } = await searchParams;
 
-  const [band, genres] = await Promise.all([
+  const [band, genres, categories] = await Promise.all([
     prisma.band.findUnique({
       where: { id },
       include: {
         genres: true,
+        category: true,
         user: { select: { email: true } },
         videos: { orderBy: [{ order: "asc" }, { id: "asc" }] },
         photos: { orderBy: [{ order: "asc" }, { id: "asc" }] },
       },
     }),
     prisma.genre.findMany({ orderBy: { name: "asc" } }),
+    prisma.category.findMany({ orderBy: { order: "asc" } }),
   ]);
   if (!band) notFound();
 
@@ -38,7 +40,7 @@ export default async function UrediBendPage({
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">{band.name}</h1>
         <span className="text-sm text-stone-500">
-          /bend/{band.slug} · {band.user?.email ?? "siroče profil (bez naloga)"}
+          /{band.category.slug}/{band.slug} · {band.user?.email ?? "siroče profil (bez naloga)"}
         </span>
       </div>
 
@@ -46,6 +48,7 @@ export default async function UrediBendPage({
         action={updateBand.bind(null, band.id)}
         band={band}
         genres={genres}
+        categories={categories}
         selectedGenreIds={band.genres.map((g) => g.id)}
         error={greska}
         saved={sacuvano === "1"}

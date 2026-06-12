@@ -15,12 +15,12 @@ export default function NotFound() {
         Ova strana ne postoji
       </h1>
       <p className="relative max-w-md animate-[rise_0.5s_ease-out_0.12s_both] leading-relaxed text-stone-600">
-        Možda je bend sklonjen, ili je link pogrešan. Katalog bendova te čeka
-        na početnoj strani.
+        Možda je profil sklonjen, ili je link pogrešan. Katalog te čeka na
+        početnoj strani.
       </p>
       <div className="relative animate-[rise_0.5s_ease-out_0.18s_both]">
         <Link href="/" className={ui.btnPrimary}>
-          ← Svi bendovi
+          ← Nazad na katalog
         </Link>
       </div>
     </main>

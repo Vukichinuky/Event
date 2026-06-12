@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { ui } from "@/lib/ui";
 import { registerBand, type RegisterState } from "./actions";
@@ -61,12 +62,12 @@ export function RegisterForm() {
 
       <p className="text-center text-sm text-stone-500">
         Već imaš nalog?{" "}
-        <a
+        <Link
           href="/prijava"
           className="font-medium text-gold-dark underline-offset-4 hover:underline"
         >
           Prijavi se
-        </a>
+        </Link>
       </p>
     </form>
   );

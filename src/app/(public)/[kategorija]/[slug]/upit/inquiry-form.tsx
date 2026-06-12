@@ -75,7 +75,7 @@ export function InquiryForm({
 
       <div className="space-y-1.5">
         <label htmlFor="message" className={ui.label}>
-          Poruka bendu
+          Poruka
         </label>
         <textarea
           id="message"
@@ -141,7 +141,7 @@ export function InquiryForm({
         {pending ? "Slanje…" : "Pošalji upit"}
       </button>
       <p className="text-xs text-stone-400">
-        Bez registracije. Tvoje podatke vidi samo bend kom šalješ upit.
+        Bez registracije. Tvoje podatke vidi samo ponuđač kom šalješ upit.
       </p>
     </form>
   );

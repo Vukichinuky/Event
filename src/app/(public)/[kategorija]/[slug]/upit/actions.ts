@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { rateLimitOk } from "@/lib/rate-limit";
 import { sendEmail } from "@/lib/email";
 import { formatKM } from "@/lib/format";
+import { bandPath } from "@/lib/band-path";
 
 export type InquiryFormState = { error: string | null };
 
@@ -31,14 +32,17 @@ export async function submitInquiry(
   _prev: InquiryFormState,
   formData: FormData,
 ): Promise<InquiryFormState> {
-  const band = await prisma.band.findUnique({ where: { slug } });
+  const band = await prisma.band.findUnique({
+    where: { slug },
+    include: { category: true },
+  });
   if (!band || band.status !== "PUBLISHED") {
-    return { error: "Bend nije pronađen." };
+    return { error: "Profil nije pronađen." };
   }
 
   // honeypot — botovi popune skriveno polje; pravimo se da je prošlo
   if (String(formData.get("website") ?? "") !== "") {
-    redirect(`/bend/${slug}/upit/hvala`);
+    redirect(`${bandPath(band)}/upit/hvala`);
   }
 
   const headerStore = await headers();
@@ -79,7 +83,7 @@ export async function submitInquiry(
   });
   if (taken) {
     return {
-      error: `${band.name} je već zauzet tog datuma. Probaj drugi datum ili pogledaj ostale bendove.`,
+      error: `${band.name} je već zauzet tog datuma. Probaj drugi datum ili pogledaj ostale ponude.`,
     };
   }
 
@@ -106,7 +110,7 @@ export async function submitInquiry(
         text: [
           `Imaš novi upit preko platforme Svadbeni bendovi!`,
           ``,
-          `Bend: ${band.name}`,
+          `Profil: ${band.name} (${band.category.name})`,
           `Datum svadbe: ${data.eventDate}`,
           `Mesto: ${data.eventCity}`,
           data.guestCount ? `Broj gostiju: ${data.guestCount}` : null,
@@ -126,5 +130,5 @@ export async function submitInquiry(
     );
   }
 
-  redirect(`/bend/${slug}/upit/hvala`);
+  redirect(`${bandPath(band)}/upit/hvala`);
 }

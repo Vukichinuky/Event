@@ -3,7 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/slug";
 
 const bandSchema = z.object({
-  name: z.string().trim().min(2, "Ime mora imati bar 2 znaka"),
+  categoryId: z.string().min(1, "Izaberi kategoriju"),
+  name: z.string().trim().min(2, "Naziv mora imati bar 2 znaka"),
   description: z.string().trim(),
   city: z.string().trim(),
   contactEmail: z.union([
@@ -18,6 +19,7 @@ const bandSchema = z.object({
 
 export function parseBandForm(formData: FormData) {
   const parsed = bandSchema.safeParse({
+    categoryId: formData.get("categoryId") ?? "",
     name: formData.get("name"),
     description: formData.get("description") ?? "",
     city: formData.get("city") ?? "",
@@ -37,6 +39,7 @@ export function parseBandForm(formData: FormData) {
   return {
     error: null,
     data: {
+      categoryId: d.categoryId,
       name: d.name,
       description: d.description,
       city: d.city,

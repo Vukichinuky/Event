@@ -40,7 +40,7 @@ export async function GET(req: Request) {
         `Telefon: ${inquiry.phone}`,
         `Email: ${inquiry.email}`,
         ``,
-        `Parovi obično pitaju više bendova — ko se prvi javi, taj svira.`,
+        `Parovi obično pitaju više ponuđača — ko se prvi javi, taj dobija posao.`,
         `Detalji i odgovor: ${SITE_URL}/dashboard/upiti`,
       ].join("\n"),
     });
@@ -66,11 +66,11 @@ export async function GET(req: Request) {
   for (const inquiry of played) {
     const sent = await sendEmail({
       to: inquiry.email,
-      subject: `Kako je sviralo — ${inquiry.band.name}?`,
+      subject: `Kako je bilo — ${inquiry.band.name}?`,
       text: [
         `Čestitamo na svadbi, ${inquiry.clientName}! 🎉`,
         ``,
-        `Nadamo se da je ${inquiry.band.name} napravio atmosferu za pamćenje.`,
+        `Nadamo se da je ${inquiry.band.name} ispunio očekivanja na tvoj veliki dan.`,
         `Tvoja recenzija pomaže parovima koji tek biraju bend — treba ti minut:`,
         ``,
         `${SITE_URL}/recenzija/${inquiry.reviewToken}`,

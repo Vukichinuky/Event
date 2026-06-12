@@ -7,6 +7,19 @@ const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
 });
 
+const CATEGORIES = [
+  { name: "Bendovi", slug: "bendovi", order: 1 },
+  { name: "Fotografi", slug: "fotografi", order: 2 },
+  { name: "Prostori", slug: "prostori", order: 3 },
+  { name: "Dekoracije", slug: "dekoracije", order: 4 },
+  { name: "Ketering", slug: "ketering", order: 5 },
+  { name: "Prstenje", slug: "prstenje", order: 6 },
+  { name: "Pozivnice", slug: "pozivnice", order: 7 },
+  { name: "Prevoz", slug: "prevoz", order: 8 },
+  { name: "Momačko i devojačko veče", slug: "momacko-i-devojacko", order: 9 },
+  { name: "Magazin", slug: "magazin", order: 10 },
+];
+
 const GENRES = [
   { name: "Narodna", slug: "narodna" },
   { name: "Pop", slug: "pop" },
@@ -17,6 +30,14 @@ const GENRES = [
 ];
 
 async function main() {
+  for (const category of CATEGORIES) {
+    await prisma.category.upsert({
+      where: { slug: category.slug },
+      update: { name: category.name, order: category.order },
+      create: { ...category, id: `cat-${category.slug}` },
+    });
+  }
+
   for (const genre of GENRES) {
     await prisma.genre.upsert({
       where: { slug: genre.slug },

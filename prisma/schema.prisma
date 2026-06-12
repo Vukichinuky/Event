@@ -55,6 +55,8 @@ model Band {
   id           String     @id @default(cuid())
   userId       String?    @unique
   user         User?      @relation(fields: [userId], references: [id])
+  categoryId   String
+  category     Category   @relation(fields: [categoryId], references: [id])
   name         String
   slug         String     @unique
   description  String     @default("")
@@ -78,6 +80,15 @@ model Band {
   inquiries        Inquiry[]
   unavailableDates UnavailableDate[]
   reviews          Review[]
+}
+
+// Kategorija usluge: bendovi, fotografi, prostori, ketering, dekoracije…
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+  order Int    @default(0)
+  bands Band[]
 }
 
 model Genre {

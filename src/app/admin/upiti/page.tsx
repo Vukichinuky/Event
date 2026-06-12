@@ -42,7 +42,7 @@ export default async function UpitiPage({
   const inquiries = await prisma.inquiry.findMany({
     where,
     include: {
-      band: { select: { name: true, slug: true } },
+      band: { select: { name: true, slug: true, category: { select: { slug: true } } } },
       review: { select: { status: true } },
     },
     orderBy: { createdAt: "desc" },
@@ -82,7 +82,7 @@ export default async function UpitiPage({
             <thead className="border-b border-stone-200 text-stone-500">
               <tr>
                 <th className="px-4 py-3 font-medium">Stigao</th>
-                <th className="px-4 py-3 font-medium">Bend</th>
+                <th className="px-4 py-3 font-medium">Ponuđač</th>
                 <th className="px-4 py-3 font-medium">Svadba</th>
                 <th className="px-4 py-3 font-medium">Par</th>
                 <th className="px-4 py-3 font-medium">Status</th>
@@ -109,7 +109,7 @@ export default async function UpitiPage({
                     </td>
                     <td className="px-4 py-3">
                       <Link
-                        href={`/bend/${inquiry.band.slug}`}
+                        href={`/${inquiry.band.category.slug}/${inquiry.band.slug}`}
                         className="text-stone-900 underline-offset-2 hover:underline"
                       >
                         {inquiry.band.name}

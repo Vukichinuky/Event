@@ -17,11 +17,11 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
   title: {
-    default: "Svadbeni bendovi — pronađi i poslušaj bend za svadbu",
-    template: "%s | Svadbeni bendovi",
+    default: "Sve za svadbu — bendovi, fotografi, prostori i sve ostalo",
+    template: "%s | Sve za svadbu",
   },
   description:
-    "Katalog svadbenih bendova za BiH. Pogledaj snimke, uporedi cene i pošalji upit — bez registracije.",
+    "Sve za svadbu na jednom mestu: bendovi, fotografi, prostori, dekoracije, ketering… Pogledaj ponude, uporedi cene i pošalji upit — bez registracije.",
 };
 
 export default function RootLayout({

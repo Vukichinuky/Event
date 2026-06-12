@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { formatPriceRange } from "@/lib/format";
 import { ui } from "@/lib/ui";
+import { bandPath } from "@/lib/band-path";
 import { InquiryForm } from "./inquiry-form";
 
 export const metadata = { title: "Pošalji upit" };
@@ -10,10 +11,13 @@ export const metadata = { title: "Pošalji upit" };
 export default async function UpitPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ kategorija: string; slug: string }>;
 }) {
   const { slug } = await params;
-  const band = await prisma.band.findUnique({ where: { slug } });
+  const band = await prisma.band.findUnique({
+    where: { slug },
+    include: { category: true },
+  });
   if (!band || band.status !== "PUBLISHED") notFound();
 
   const minDate = new Date().toISOString().slice(0, 10);
@@ -27,7 +31,7 @@ export default async function UpitPage({
       <div className="relative mx-auto max-w-xl space-y-8 px-4 py-10 sm:px-6 sm:py-14">
         <nav className="animate-[rise_0.4s_ease-out_both] text-sm text-stone-500">
           <Link
-            href={`/bend/${band.slug}`}
+            href={bandPath(band)}
             className="transition hover:text-gold-dark"
           >
             ← {band.name}

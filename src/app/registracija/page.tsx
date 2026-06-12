@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ui } from "@/lib/ui";
 import { RegisterForm } from "./register-form";
 
-export const metadata = { title: "Registracija benda" };
+export const metadata = { title: "Registracija" };
 
 export default function RegistracijaPage() {
   return (
@@ -17,17 +17,17 @@ export default function RegistracijaPage() {
             ♫
           </span>
           <span className="font-display text-xl font-semibold tracking-tight text-ink">
-            Svadbeni bendovi
+            Sve za svadbu
           </span>
         </Link>
 
         <div className={`space-y-5 ${ui.card} p-7`}>
           <div className="space-y-1">
             <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">
-              Registracija benda
+              Registracija ponuđača
             </h1>
             <p className="text-sm text-stone-500">
-              Besplatno. Uredi profil, dodaj snimke i primaj upite parova.
+              Za bendove, fotografe, prostore i sve svadbene usluge. Besplatno.
             </p>
           </div>
           <RegisterForm />

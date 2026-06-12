@@ -8,7 +8,7 @@ export const metadata = { title: "Upit poslat" };
 export default async function HvalaPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ kategorija: string; slug: string }>;
 }) {
   const { slug } = await params;
   const band = await prisma.band.findUnique({ where: { slug } });
@@ -29,12 +29,12 @@ export default async function HvalaPage({
         </h1>
         <p className="mx-auto max-w-md animate-[rise_0.5s_ease-out_0.12s_both] leading-relaxed text-stone-600">
           {band.name} je dobio tvoj upit i javiće ti se direktno, telefonom ili
-          mejlom. Dok čekaš, pogledaj još bendova — uvek je dobro imati
+          mejlom. Dok čekaš, pogledaj još ponuda — uvek je dobro imati
           rezervnu opciju za svoj datum.
         </p>
         <div className="animate-[rise_0.5s_ease-out_0.18s_both]">
           <Link href="/" className={ui.btnPrimary}>
-            Pogledaj još bendova
+            Nazad na katalog
           </Link>
         </div>
       </div>
