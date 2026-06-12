@@ -1,12 +1,20 @@
 import Link from "next/link";
 
-function Logo() {
+function Logo({ dark = false }: { dark?: boolean }) {
   return (
     <Link href="/" className="group flex items-center gap-2.5">
-      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-base text-gold shadow-soft transition duration-300 group-hover:bg-gold group-hover:text-white">
+      <span
+        className={`flex h-9 w-9 items-center justify-center rounded-full text-base shadow-soft transition duration-300 group-hover:bg-gold group-hover:text-white ${
+          dark ? "bg-gold-soft text-gold-dark" : "bg-ink text-gold"
+        }`}
+      >
         ♫
       </span>
-      <span className="font-display text-lg font-semibold tracking-tight text-ink">
+      <span
+        className={`font-display text-lg font-semibold tracking-tight ${
+          dark ? "text-cream" : "text-ink"
+        }`}
+      >
         Svadbeni bendovi
       </span>
     </Link>
@@ -34,25 +42,35 @@ export default function PublicLayout({
 
       <div className="flex-1">{children}</div>
 
-      <footer className="border-t border-stone-200/60 bg-white">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-10 sm:flex-row sm:items-end sm:justify-between sm:px-6">
-          <div className="space-y-2">
-            <p className="font-display text-lg font-semibold text-ink">
-              Svadbeni bendovi
-            </p>
-            <p className="max-w-sm text-sm leading-relaxed text-stone-500">
+      <footer className="grain relative overflow-hidden bg-ink">
+        <div
+          aria-hidden
+          className="absolute -top-32 right-[10%] h-64 w-64 animate-[drift2_18s_ease-in-out_infinite] rounded-full bg-gold/15 blur-[90px]"
+        />
+        <div className="relative mx-auto flex max-w-6xl flex-col gap-6 px-4 py-12 sm:flex-row sm:items-end sm:justify-between sm:px-6">
+          <div className="space-y-3">
+            <Logo dark />
+            <p className="max-w-sm text-sm leading-relaxed text-stone-400">
               Poslušaj kako sviraju, uporedi cene i pošalji upit — bez
               registracije. Bendovi sviraju na celoj teritoriji BiH i šire.
             </p>
           </div>
-          <div className="flex items-center gap-5 text-sm text-stone-500">
-            <Link href="/registracija" className="transition hover:text-gold-dark">
+          <div className="flex items-center gap-6 text-sm text-stone-400">
+            <Link
+              href="/registracija"
+              className="transition hover:text-gold"
+            >
               Registruj svoj bend
             </Link>
-            <Link href="/prijava" className="transition hover:text-gold-dark">
+            <Link href="/prijava" className="transition hover:text-gold">
               Prijava
             </Link>
           </div>
+        </div>
+        <div className="relative border-t border-white/5">
+          <p className="mx-auto max-w-6xl px-4 py-4 text-xs text-stone-600 sm:px-6">
+            ♫ Svadbeni bendovi — katalog svadbenih bendova za BiH
+          </p>
         </div>
       </footer>
     </div>

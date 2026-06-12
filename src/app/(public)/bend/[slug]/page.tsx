@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { parseVideoUrl } from "@/lib/video";
 import { formatPriceRange, formatKM } from "@/lib/format";
 import { TrackView } from "@/components/track-view";
+import { Reveal } from "@/components/reveal";
 import { ui } from "@/lib/ui";
 
 async function getBand(slug: string) {
@@ -109,9 +110,9 @@ export default async function BendPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Heroj profila */}
-      <section className="relative overflow-hidden border-b border-stone-200/60 bg-white">
-        {band.coverImage && (
+      {/* Heroj profila — tamni, sa naslovnom kao atmosferom */}
+      <section className="grain relative overflow-hidden bg-ink">
+        {band.coverImage ? (
           <>
             <Image
               src={band.coverImage}
@@ -119,15 +120,20 @@ export default async function BendPage({
               fill
               priority
               sizes="100vw"
-              className="object-cover opacity-25 blur-2xl"
+              className="object-cover opacity-30 blur-2xl"
               aria-hidden
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-cream/40 via-white/70 to-white" />
+            <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/80 to-ink" />
           </>
+        ) : (
+          <div
+            aria-hidden
+            className="absolute -top-32 right-[-10%] h-[420px] w-[420px] animate-[drift_16s_ease-in-out_infinite] rounded-full bg-gold/20 blur-[110px]"
+          />
         )}
-        <div className="relative mx-auto max-w-5xl px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14">
-          <nav className="animate-[rise_0.4s_ease-out_both] text-sm text-stone-500">
-            <Link href="/" className="transition hover:text-gold-dark">
+        <div className="relative mx-auto max-w-5xl px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16">
+          <nav className="animate-[rise_0.4s_ease-out_both] text-sm text-stone-400">
+            <Link href="/" className="transition hover:text-gold">
               ← Svi bendovi
             </Link>
           </nav>
@@ -153,10 +159,10 @@ export default async function BendPage({
                   </span>
                 ))}
               </div>
-              <h1 className="font-display text-4xl leading-tight font-semibold tracking-tight text-ink sm:text-5xl">
+              <h1 className="font-display text-4xl leading-tight font-semibold tracking-tight text-cream sm:text-5xl">
                 {band.name}
               </h1>
-              <p className="text-sm text-stone-500">
+              <p className="text-sm text-stone-400">
                 {band.city ? `${band.city} · ` : ""}svira na celoj teritoriji
                 BiH i šire
               </p>
@@ -164,19 +170,19 @@ export default async function BendPage({
                 <p className="flex items-center gap-2 text-sm">
                   <span className="text-gold">
                     {"★".repeat(Math.round(avgRating))}
-                    <span className="text-stone-300">
+                    <span className="text-white/20">
                       {"★".repeat(5 - Math.round(avgRating))}
                     </span>
                   </span>
-                  <strong className="text-ink">{avgRating.toFixed(1)}</strong>
-                  <span className="text-stone-400">
+                  <strong className="text-cream">{avgRating.toFixed(1)}</strong>
+                  <span className="text-stone-500">
                     ({band.reviews.length}{" "}
                     {band.reviews.length === 1 ? "recenzija" : "recenzije"})
                   </span>
                 </p>
               )}
               <div className="flex flex-wrap items-center gap-4 pt-1">
-                <span className="font-display text-2xl font-semibold text-ink">
+                <span className={`font-display text-2xl font-semibold ${ui.goldText}`}>
                   {formatPriceRange(band.priceFrom, band.priceTo)}
                 </span>
                 <Link
@@ -194,6 +200,7 @@ export default async function BendPage({
       <div className="mx-auto max-w-5xl space-y-14 px-4 pt-12 sm:px-6">
         {/* Video je proizvod — snimci pre svega ostalog */}
         {videos.length > 0 && (
+          <Reveal>
           <section className="space-y-6">
             <SectionTitle eyebrow="Snimci" title="Poslušaj kako sviraju" />
             <div className="grid gap-5 sm:grid-cols-2">
@@ -218,9 +225,11 @@ export default async function BendPage({
               ))}
             </div>
           </section>
+          </Reveal>
         )}
 
         {band.photos.length > 0 && (
+          <Reveal>
           <section className="space-y-6">
             <SectionTitle eyebrow="Galerija" title="Sa pravih svadbi" />
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -240,18 +249,22 @@ export default async function BendPage({
               ))}
             </div>
           </section>
+          </Reveal>
         )}
 
         {band.description && (
+          <Reveal>
           <section className="space-y-6">
             <SectionTitle eyebrow="O bendu" title="Ko su oni" />
             <p className="max-w-3xl text-base leading-relaxed whitespace-pre-line text-stone-600">
               {band.description}
             </p>
           </section>
+          </Reveal>
         )}
 
         {band.reviews.length > 0 && (
+          <Reveal>
           <section className="space-y-6">
             <SectionTitle eyebrow="Recenzije" title="Šta kažu parovi" />
             <ul className="grid gap-5 sm:grid-cols-2">
@@ -296,26 +309,36 @@ export default async function BendPage({
               ))}
             </ul>
           </section>
+          </Reveal>
         )}
 
         {/* Završni CTA */}
-        <section className="overflow-hidden rounded-3xl bg-ink px-6 py-12 text-center shadow-lift sm:px-12">
-          <p className="text-[11px] font-semibold tracking-[0.22em] text-gold uppercase">
-            Tvoj datum se brzo popunjava
-          </p>
-          <h2 className="mx-auto mt-3 max-w-lg font-display text-3xl font-semibold text-white">
-            Pitaj {band.name} da li je slobodan za tvoju svadbu
-          </h2>
-          <p className="mt-3 text-sm text-stone-400">
-            Bez registracije · bend ti se javlja direktno
-          </p>
-          <Link
-            href={`/bend/${band.slug}/upit`}
-            className={`mt-7 ${ui.btnGold}`}
-          >
-            Pošalji upit · {formatPriceRange(band.priceFrom, band.priceTo)}
-          </Link>
-        </section>
+        <Reveal>
+          <section className="grain relative overflow-hidden rounded-3xl bg-ink px-6 py-14 text-center shadow-lift sm:px-12">
+            <div
+              aria-hidden
+              className="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 animate-[drift_14s_ease-in-out_infinite] rounded-full bg-gold/25 blur-[100px]"
+            />
+            <p className="relative text-[11px] font-semibold tracking-[0.28em] text-gold uppercase">
+              Tvoj datum se brzo popunjava
+            </p>
+            <h2 className="relative mx-auto mt-4 max-w-lg font-display text-3xl font-semibold text-cream">
+              Pitaj {band.name}{" "}
+              <em className={`font-light italic ${ui.goldText}`}>
+                da li je slobodan
+              </em>{" "}
+              za tvoju svadbu
+            </h2>
+            <p className="relative mt-3 text-sm text-stone-400">
+              Bez registracije · bend ti se javlja direktno
+            </p>
+            <div className="relative mt-8">
+              <Link href={`/bend/${band.slug}/upit`} className={ui.btnGold}>
+                Pošalji upit · {formatPriceRange(band.priceFrom, band.priceTo)}
+              </Link>
+            </div>
+          </section>
+        </Reveal>
       </div>
 
       {/* Lepljivo dugme na mobilnom — prioritet je konverzija ka upitu */}

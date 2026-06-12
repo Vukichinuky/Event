@@ -1,12 +1,31 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { BandCard } from "@/components/band-card";
+import { Reveal } from "@/components/reveal";
 import { ui } from "@/lib/ui";
 import type { Prisma } from "@/generated/prisma/client";
 
 const PAGE_SIZE = 12;
 
 const BUDGET_OPTIONS = [2000, 3000, 4000, 5000];
+
+const STEPS = [
+  {
+    n: "01",
+    title: "Poslušaj snimke",
+    text: "Pravi nastupi sa pravih svadbi — ne studijski snimci.",
+  },
+  {
+    n: "02",
+    title: "Uporedi cene",
+    text: "Svaki bend ima jasan cenovni rang. Bez skrivenih cifara.",
+  },
+  {
+    n: "03",
+    title: "Pošalji upit",
+    text: "Dva minuta, bez registracije. Bend ti se javlja direktno.",
+  },
+];
 
 export default async function KatalogPage({
   searchParams,
@@ -47,38 +66,63 @@ export default async function KatalogPage({
 
   return (
     <main>
-      {/* Hero */}
-      <section className="relative overflow-hidden">
+      {/* Tamni editorijalni hero */}
+      <section className="grain relative overflow-hidden bg-ink">
+        {/* lebdeći zlatni oblaci */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_80%_at_70%_-10%,rgb(176_141_87/0.16),transparent_70%)]"
+          className="absolute -top-32 right-[-10%] h-[480px] w-[480px] animate-[drift_16s_ease-in-out_infinite] rounded-full bg-gold/25 blur-[120px]"
         />
-        <div className="mx-auto max-w-6xl px-4 pt-14 pb-10 sm:px-6 sm:pt-20 sm:pb-14">
-          <p
-            className={`${ui.eyebrow} animate-[rise_0.5s_ease-out_both]`}
-          >
+        <div
+          aria-hidden
+          className="absolute -bottom-40 left-[-15%] h-[420px] w-[420px] animate-[drift2_20s_ease-in-out_infinite] rounded-full bg-[#7a5a2e]/30 blur-[110px]"
+        />
+        {/* ogromna dekorativna nota */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute top-1/2 right-[4%] hidden -translate-y-1/2 font-display text-[22rem] leading-none text-white/[0.04] select-none lg:block"
+        >
+          ♫
+        </div>
+
+        <div className="relative mx-auto max-w-6xl px-4 pt-20 pb-28 sm:px-6 sm:pt-28 sm:pb-36">
+          <p className="animate-[rise_0.6s_ease-out_both] text-[11px] font-semibold tracking-[0.28em] text-gold uppercase">
             Katalog svadbenih bendova · BiH i šire
           </p>
-          <h1 className="mt-4 max-w-3xl animate-[rise_0.5s_ease-out_0.08s_both] font-display text-4xl leading-[1.08] font-semibold tracking-tight text-ink sm:text-6xl">
-            Bend koji će tvoju svadbu
-            <br />
-            <em className="font-light text-gold-dark italic">
+          <h1 className="mt-5 max-w-3xl animate-[rise_0.6s_ease-out_0.1s_both] font-display text-5xl leading-[1.05] font-semibold tracking-tight text-cream sm:text-7xl">
+            Bend koji će tvoju svadbu{" "}
+            <em className={`font-light italic ${ui.goldText}`}>
               držati na nogama.
             </em>
           </h1>
-          <p className="mt-5 max-w-xl animate-[rise_0.5s_ease-out_0.16s_both] text-base leading-relaxed text-stone-600 sm:text-lg">
+          <p className="mt-6 max-w-xl animate-[rise_0.6s_ease-out_0.2s_both] text-base leading-relaxed text-stone-400 sm:text-lg">
             Poslušaj snimke sa pravih svadbi, uporedi cene i pošalji upit za
             svoj datum — bez registracije, za dva minuta.
           </p>
+          <div className="mt-9 flex animate-[rise_0.6s_ease-out_0.3s_both] flex-wrap items-center gap-5">
+            <a href="#bendovi" className={ui.btnGold}>
+              Pogledaj bendove
+            </a>
+            <span className="text-sm text-stone-500">
+              {total > 0 ? `${total} ${total === 1 ? "bend" : total < 5 ? "benda" : "bendova"} čeka` : "Katalog raste svake nedelje"}
+              {" · "}besplatno za parove
+            </span>
+          </div>
         </div>
+
+        {/* meki prelaz u sadržaj */}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-cream" />
       </section>
 
-      <div className="mx-auto max-w-6xl space-y-8 px-4 pb-20 sm:px-6">
-        {/* Filteri */}
+      <div
+        id="bendovi"
+        className="mx-auto max-w-6xl scroll-mt-24 space-y-10 px-4 pb-24 sm:px-6"
+      >
+        {/* Filteri — plutaju preko ivice heroja */}
         <form
           method="get"
           action="/"
-          className="flex animate-[rise_0.5s_ease-out_0.24s_both] flex-wrap items-end gap-4 rounded-2xl border border-stone-200/70 bg-white/80 p-5 shadow-soft backdrop-blur-sm"
+          className="relative z-10 -mt-12 flex flex-wrap items-end gap-4 rounded-2xl border border-stone-200/70 bg-white/90 p-5 shadow-lift backdrop-blur-xl"
         >
           <div className="space-y-1.5">
             <label htmlFor="zanr" className={ui.label}>
@@ -120,12 +164,9 @@ export default async function KatalogPage({
               Poništi filtere
             </Link>
           )}
-          <p className="ml-auto hidden self-center text-sm text-stone-400 sm:block">
-            {total} {total === 1 ? "bend" : total < 5 && total > 0 ? "benda" : "bendova"}
-          </p>
         </form>
 
-        {/* Grid */}
+        {/* Grid bendova sa stagger ulaskom */}
         {bands.length === 0 ? (
           <div className={ui.emptyState}>
             <p className="font-display text-lg text-ink">
@@ -136,16 +177,18 @@ export default async function KatalogPage({
             </p>
           </div>
         ) : (
-          <div className="grid animate-[fade_0.6s_ease-out_both] gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {bands.map((band) => (
-              <BandCard key={band.id} band={band} />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {bands.map((band, i) => (
+              <Reveal key={band.id} delay={(i % 3) * 90}>
+                <BandCard band={band} />
+              </Reveal>
             ))}
           </div>
         )}
 
         {/* Paginacija */}
         {totalPages > 1 && (
-          <nav className="flex items-center justify-center gap-3 pt-4 text-sm">
+          <nav className="flex items-center justify-center gap-3 pt-2 text-sm">
             {page > 1 && (
               <Link href={pageUrl(page - 1)} className={ui.btnGhost}>
                 ← Prethodna
@@ -161,6 +204,52 @@ export default async function KatalogPage({
             )}
           </nav>
         )}
+
+        {/* Kako radi */}
+        <section className="grid gap-6 border-t border-stone-200/70 pt-12 sm:grid-cols-3">
+          {STEPS.map((step, i) => (
+            <Reveal key={step.n} delay={i * 120}>
+              <div className="space-y-3">
+                <span className={`font-display text-4xl font-light ${ui.goldText}`}>
+                  {step.n}
+                </span>
+                <h3 className="font-display text-xl font-semibold tracking-tight text-ink">
+                  {step.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-stone-500">
+                  {step.text}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </section>
+
+        {/* CTA za bendove */}
+        <Reveal>
+          <section className="grain relative overflow-hidden rounded-3xl bg-ink px-6 py-14 text-center shadow-lift sm:px-12">
+            <div
+              aria-hidden
+              className="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 animate-[drift_14s_ease-in-out_infinite] rounded-full bg-gold/25 blur-[100px]"
+            />
+            <p className="relative text-[11px] font-semibold tracking-[0.28em] text-gold uppercase">
+              Sviraš u bendu?
+            </p>
+            <h2 className="relative mx-auto mt-4 max-w-xl font-display text-3xl font-semibold text-cream sm:text-4xl">
+              Parovi te traže.{" "}
+              <em className={`font-light italic ${ui.goldText}`}>
+                Neka te i pronađu.
+              </em>
+            </h2>
+            <p className="relative mt-4 text-sm text-stone-400">
+              Besplatno listanje · upiti direktno na mejl · statistika profila
+            </p>
+            <div className="relative mt-8">
+              <Link href="/registracija" className={ui.btnGold}>
+                Registruj svoj bend
+              </Link>
+            </div>
+          </section>
+        </Reveal>
       </div>
     </main>
   );
