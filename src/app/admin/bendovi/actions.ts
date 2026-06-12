@@ -34,18 +34,20 @@ export async function updateBand(bandId: string, formData: FormData) {
 
   const { genreIds, ...fields } = data;
   const slug = await uniqueSlug(fields.name, bandId);
-  await prisma.band.update({
+  const band = await prisma.band.update({
     where: { id: bandId },
     data: {
       ...fields,
       slug,
       genres: { set: genreIds.map((id) => ({ id })) },
     },
+    include: { category: true },
   });
 
   revalidatePath("/admin/bendovi");
   revalidatePath("/");
-  revalidatePath(`/bend/${slug}`);
+  revalidatePath(`/${band.category.slug}`);
+  revalidatePath(`/${band.category.slug}/${slug}`);
   redirect(`/admin/bendovi/${bandId}?sacuvano=1`);
 }
 

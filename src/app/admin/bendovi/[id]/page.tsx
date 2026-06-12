@@ -44,6 +44,14 @@ export default async function UrediBendPage({
         </span>
       </div>
 
+      {band.status !== "PUBLISHED" && (
+        <p className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+          Ovaj profil <strong>nije vidljiv na sajtu</strong> — status je „
+          {band.status === "DRAFT" ? "Nacrt" : "Sakriven"}“. Kad je spreman,
+          promeni status na <strong>Objavljen</strong> u formi ispod i sačuvaj.
+        </p>
+      )}
+
       <BandForm
         action={updateBand.bind(null, band.id)}
         band={band}

@@ -4,6 +4,9 @@ import { BandCard } from "@/components/band-card";
 import { Reveal } from "@/components/reveal";
 import { ui } from "@/lib/ui";
 
+// katalog uvek svež iz baze — bez ovoga bi se strana zamrzla u build-u
+export const dynamic = "force-dynamic";
+
 const STEPS = [
   {
     n: "01",
