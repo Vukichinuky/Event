@@ -87,7 +87,7 @@ export default async function KategorijaPage({
         <p className={`${ui.eyebrow} animate-[rise_0.5s_ease-out_0.05s_both]`}>
           Kategorija
         </p>
-        <h1 className="animate-[rise_0.5s_ease-out_0.1s_both] font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+        <h1 className="animate-[rise_0.5s_ease-out_0.1s_both] font-display text-5xl font-semibold tracking-tight text-ink sm:text-7xl">
           {category.name}{" "}
           <em className={`font-light italic ${ui.goldText}`}>za svadbu</em>
         </h1>

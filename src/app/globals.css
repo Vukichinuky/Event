@@ -113,3 +113,43 @@ body {
   opacity: 0.05;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+
+/* ===== editorijalni aparat v3 ===== */
+
+/* rotirajuća aurora iza heroja */
+@keyframes spin-slower {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* beskonačna traka — sadržaj dupliran, klizi pola širine */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* svetlucanje zvezdica */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.15);
+  }
+}
+
+/* tekst samo kao kontura — za velike display naslove */
+.text-outline {
+  -webkit-text-stroke: 1.5px rgb(250 248 243 / 0.4);
+  color: transparent;
+}
+
+.text-outline-ink {
+  -webkit-text-stroke: 1.5px rgb(27 21 15 / 0.18);
+  color: transparent;
+}

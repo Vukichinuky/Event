@@ -67,6 +67,13 @@ export default function PublicLayout({
             </Link>
           </div>
         </div>
+        {/* džinovski wordmark — potpis na dnu svake strane */}
+        <div
+          aria-hidden
+          className="text-outline pointer-events-none relative -mb-[2vw] overflow-hidden text-center font-display text-[13.5vw] leading-none font-semibold tracking-tight whitespace-nowrap select-none"
+        >
+          Sve za svadbu
+        </div>
         <div className="relative border-t border-white/5">
           <p className="mx-auto max-w-6xl px-4 py-4 text-xs text-stone-600 sm:px-6">
             ♫ Sve za svadbu — katalog svadbenih usluga za BiH
