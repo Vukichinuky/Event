@@ -84,21 +84,25 @@ export function BandForm({
       </div>
 
       <fieldset className="space-y-2.5">
-        <legend className={ui.label}>Žanrovi (samo za bendove)</legend>
+        <legend className={ui.label}>
+          Žanrovi (samo za bendove) —{" "}
+          <span className="font-semibold text-gold-dark">
+            možeš izabrati više
+          </span>
+        </legend>
         <div className="flex flex-wrap gap-2">
           {genres.map((genre) => (
-            <label
-              key={genre.id}
-              className="cursor-pointer rounded-full border border-stone-200 bg-white px-4 py-1.5 text-sm text-stone-600 transition hover:border-gold has-checked:border-gold has-checked:bg-gold has-checked:font-medium has-checked:text-white"
-            >
+            <label key={genre.id} className="cursor-pointer">
               <input
                 type="checkbox"
                 name="genres"
                 value={genre.id}
                 defaultChecked={selectedGenreIds?.includes(genre.id)}
-                className="sr-only"
+                className="peer sr-only"
               />
-              {genre.name}
+              <span className="inline-block rounded-full border border-stone-200 bg-white px-4 py-1.5 text-sm text-stone-600 transition select-none peer-checked:border-gold peer-checked:bg-gold peer-checked:font-medium peer-checked:text-white peer-checked:before:content-['✓_'] peer-focus-visible:ring-4 peer-focus-visible:ring-gold/25 hover:border-gold">
+                {genre.name}
+              </span>
             </label>
           ))}
         </div>

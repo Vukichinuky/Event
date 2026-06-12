@@ -22,20 +22,19 @@ export function ReviewForm({ token }: { token: string }) {
         <legend className={ui.label}>Ocena *</legend>
         <div className="flex gap-2.5">
           {[1, 2, 3, 4, 5].map((value) => (
-            <label
-              key={value}
-              className="flex h-14 w-14 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-2xl border border-stone-200 bg-white text-sm shadow-soft transition duration-200 hover:-translate-y-0.5 hover:border-gold has-checked:border-gold has-checked:bg-gold has-checked:text-white has-checked:shadow-lift"
-            >
+            <label key={value} className="cursor-pointer">
               <input
                 type="radio"
                 name="rating"
                 value={value}
                 required
-                className="sr-only"
+                className="peer sr-only"
               />
-              <span className="font-semibold">{value}</span>
-              <span aria-hidden className="text-xs">
-                ★
+              <span className="flex h-14 w-14 flex-col items-center justify-center gap-0.5 rounded-2xl border border-stone-200 bg-white text-sm shadow-soft transition duration-200 select-none peer-checked:border-gold peer-checked:bg-gold peer-checked:text-white peer-checked:shadow-lift peer-focus-visible:ring-4 peer-focus-visible:ring-gold/25 hover:-translate-y-0.5 hover:border-gold">
+                <span className="font-semibold">{value}</span>
+                <span aria-hidden className="text-xs">
+                  ★
+                </span>
               </span>
             </label>
           ))}
