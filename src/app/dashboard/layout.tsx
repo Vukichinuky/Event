@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { requireBand } from "@/lib/require-auth";
-import { signOut } from "@/lib/auth";
+import { PanelShell } from "@/components/panel-shell";
 
 export const metadata = { title: "Bend panel" };
 
@@ -12,64 +11,18 @@ export default async function DashboardLayout({
   const { user, band } = await requireBand();
 
   return (
-    <div className="min-h-screen bg-stone-50">
-      <header className="border-b border-stone-200 bg-white">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-y-1 px-4 py-3">
-          <nav className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span className="font-semibold text-stone-900">
-              {band?.name ?? "Bend panel"}
-            </span>
-            <Link
-              href="/dashboard"
-              className="text-sm text-stone-600 hover:text-stone-900"
-            >
-              Pregled
-            </Link>
-            <Link
-              href="/dashboard/upiti"
-              className="text-sm text-stone-600 hover:text-stone-900"
-            >
-              Upiti
-            </Link>
-            <Link
-              href="/dashboard/kalendar"
-              className="text-sm text-stone-600 hover:text-stone-900"
-            >
-              Kalendar
-            </Link>
-            <Link
-              href="/dashboard/recenzije"
-              className="text-sm text-stone-600 hover:text-stone-900"
-            >
-              Recenzije
-            </Link>
-            <Link
-              href="/dashboard/profil"
-              className="text-sm text-stone-600 hover:text-stone-900"
-            >
-              Profil
-            </Link>
-          </nav>
-          <form
-            action={async () => {
-              "use server";
-              await signOut({ redirectTo: "/prijava" });
-            }}
-            className="flex items-center gap-3"
-          >
-            <span className="hidden text-sm text-stone-500 sm:inline">
-              {user.email}
-            </span>
-            <button
-              type="submit"
-              className="text-sm text-stone-600 underline hover:text-stone-900"
-            >
-              Odjava
-            </button>
-          </form>
-        </div>
-      </header>
-      <main className="mx-auto max-w-5xl px-4 py-6">{children}</main>
-    </div>
+    <PanelShell
+      brand={band?.name ?? "Bend panel"}
+      email={user.email}
+      links={[
+        { href: "/dashboard", label: "Pregled" },
+        { href: "/dashboard/upiti", label: "Upiti" },
+        { href: "/dashboard/kalendar", label: "Kalendar" },
+        { href: "/dashboard/recenzije", label: "Recenzije" },
+        { href: "/dashboard/profil", label: "Profil" },
+      ]}
+    >
+      {children}
+    </PanelShell>
   );
 }

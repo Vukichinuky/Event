@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { parseVideoUrl } from "@/lib/video";
 import { formatPriceRange, formatKM } from "@/lib/format";
 import { TrackView } from "@/components/track-view";
+import { ui } from "@/lib/ui";
 
 async function getBand(slug: string) {
   return prisma.band.findUnique({
@@ -43,6 +44,23 @@ export async function generateMetadata({
       images: band.coverImage ? [band.coverImage] : [],
     },
   };
+}
+
+function SectionTitle({
+  eyebrow,
+  title,
+}: {
+  eyebrow: string;
+  title: string;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <p className={ui.eyebrow}>{eyebrow}</p>
+      <h2 className="font-display text-2xl font-semibold tracking-tight text-ink">
+        {title}
+      </h2>
+    </div>
+  );
 }
 
 export default async function BendPage({
@@ -84,170 +102,229 @@ export default async function BendPage({
   };
 
   return (
-    <main className="mx-auto max-w-4xl space-y-8 px-4 py-8 pb-24 sm:pb-8">
+    <main className="pb-28 sm:pb-16">
       <TrackView slug={band.slug} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <nav className="text-sm text-stone-500">
-        <Link href="/" className="hover:underline">
-          ← Svi bendovi
-        </Link>
-      </nav>
-
-      <header className="space-y-3">
-        <h1 className="text-3xl font-bold text-stone-900">{band.name}</h1>
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          {band.genres.map((g) => (
-            <span
-              key={g.id}
-              className="rounded-full bg-stone-200 px-3 py-1 text-stone-700"
-            >
-              {g.name}
-            </span>
-          ))}
-        </div>
-        <p className="text-sm text-stone-500">
-          {band.city ? `${band.city} · ` : ""}svira na celoj teritoriji BiH i
-          šire
-        </p>
-        {avgRating && (
-          <p className="text-sm text-stone-700">
-            <span className="text-amber-500">★</span>{" "}
-            <strong>{avgRating.toFixed(1)}</strong> ({band.reviews.length}{" "}
-            {band.reviews.length === 1 ? "recenzija" : "recenzije"})
-          </p>
+      {/* Heroj profila */}
+      <section className="relative overflow-hidden border-b border-stone-200/60 bg-white">
+        {band.coverImage && (
+          <>
+            <Image
+              src={band.coverImage}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover opacity-25 blur-2xl"
+              aria-hidden
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-cream/40 via-white/70 to-white" />
+          </>
         )}
-        <div className="flex items-center gap-4">
-          <span className="text-lg font-semibold text-stone-900">
-            {formatPriceRange(band.priceFrom, band.priceTo)}
-          </span>
-          <Link
-            href={`/bend/${band.slug}/upit`}
-            className="hidden rounded-md bg-stone-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-700 sm:inline-block"
-          >
-            Pošalji upit
-          </Link>
-        </div>
-      </header>
+        <div className="relative mx-auto max-w-5xl px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14">
+          <nav className="animate-[rise_0.4s_ease-out_both] text-sm text-stone-500">
+            <Link href="/" className="transition hover:text-gold-dark">
+              ← Svi bendovi
+            </Link>
+          </nav>
 
-      {/* Video je proizvod — snimci pre svega ostalog */}
-      {videos.length > 0 && (
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-stone-900">
-            Poslušaj kako sviraju
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {videos.map((video) => (
-              <div
-                key={video.id}
-                className={
-                  video.parsed!.platform === "YOUTUBE"
-                    ? "aspect-video overflow-hidden rounded-xl bg-stone-200 sm:col-span-2"
-                    : "aspect-[4/5] max-w-sm overflow-hidden rounded-xl bg-stone-200"
-                }
-              >
-                <iframe
-                  src={video.parsed!.embedUrl}
-                  title={`Snimak — ${band.name}`}
-                  className="h-full w-full"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {band.photos.length > 0 && (
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-stone-900">Galerija</h2>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {band.photos.map((photo) => (
-              <div
-                key={photo.id}
-                className="relative aspect-[4/3] overflow-hidden rounded-lg"
-              >
+          <div className="mt-6 flex flex-col gap-8 sm:flex-row sm:items-end">
+            {band.coverImage && (
+              <div className="relative aspect-[4/3] w-full max-w-sm shrink-0 animate-[rise_0.5s_ease-out_0.05s_both] overflow-hidden rounded-2xl shadow-lift sm:w-72">
                 <Image
-                  src={photo.path}
-                  alt={`Fotografija — ${band.name}`}
+                  src={band.coverImage}
+                  alt={`Bend ${band.name}`}
                   fill
-                  sizes="(max-width: 640px) 50vw, 300px"
+                  priority
+                  sizes="(max-width: 640px) 100vw, 288px"
                   className="object-cover"
                 />
               </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {band.description && (
-        <section className="space-y-3">
-          <h2 className="text-xl font-semibold text-stone-900">O bendu</h2>
-          <p className="whitespace-pre-line leading-relaxed text-stone-700">
-            {band.description}
-          </p>
-        </section>
-      )}
-
-      {band.reviews.length > 0 && (
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-stone-900">
-            Recenzije parova
-          </h2>
-          <ul className="space-y-4">
-            {band.reviews.map((review) => (
-              <li
-                key={review.id}
-                className="space-y-2 rounded-xl border border-stone-200 bg-white p-4"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span
-                    className="text-amber-500"
-                    aria-label={`Ocena ${review.rating} od 5`}
-                  >
-                    {"★".repeat(review.rating)}
+            )}
+            <div className="min-w-0 animate-[rise_0.5s_ease-out_0.1s_both] space-y-4">
+              <div className="flex flex-wrap items-center gap-2">
+                {band.genres.map((g) => (
+                  <span key={g.id} className={ui.chip}>
+                    {g.name}
+                  </span>
+                ))}
+              </div>
+              <h1 className="font-display text-4xl leading-tight font-semibold tracking-tight text-ink sm:text-5xl">
+                {band.name}
+              </h1>
+              <p className="text-sm text-stone-500">
+                {band.city ? `${band.city} · ` : ""}svira na celoj teritoriji
+                BiH i šire
+              </p>
+              {avgRating && (
+                <p className="flex items-center gap-2 text-sm">
+                  <span className="text-gold">
+                    {"★".repeat(Math.round(avgRating))}
                     <span className="text-stone-300">
-                      {"★".repeat(5 - review.rating)}
+                      {"★".repeat(5 - Math.round(avgRating))}
                     </span>
                   </span>
-                  <span className="text-xs text-stone-400">
-                    {review.inquiry.clientName} ·{" "}
-                    {review.createdAt.toLocaleDateString("sr-Latn-BA")}
+                  <strong className="text-ink">{avgRating.toFixed(1)}</strong>
+                  <span className="text-stone-400">
+                    ({band.reviews.length}{" "}
+                    {band.reviews.length === 1 ? "recenzija" : "recenzije"})
                   </span>
+                </p>
+              )}
+              <div className="flex flex-wrap items-center gap-4 pt-1">
+                <span className="font-display text-2xl font-semibold text-ink">
+                  {formatPriceRange(band.priceFrom, band.priceTo)}
+                </span>
+                <Link
+                  href={`/bend/${band.slug}/upit`}
+                  className={`hidden sm:inline-flex ${ui.btnGold}`}
+                >
+                  Pošalji upit
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-5xl space-y-14 px-4 pt-12 sm:px-6">
+        {/* Video je proizvod — snimci pre svega ostalog */}
+        {videos.length > 0 && (
+          <section className="space-y-6">
+            <SectionTitle eyebrow="Snimci" title="Poslušaj kako sviraju" />
+            <div className="grid gap-5 sm:grid-cols-2">
+              {videos.map((video) => (
+                <div
+                  key={video.id}
+                  className={
+                    video.parsed!.platform === "YOUTUBE"
+                      ? "aspect-video overflow-hidden rounded-2xl bg-ink shadow-soft sm:col-span-2"
+                      : "aspect-[4/5] max-w-sm overflow-hidden rounded-2xl bg-ink shadow-soft"
+                  }
+                >
+                  <iframe
+                    src={video.parsed!.embedUrl}
+                    title={`Snimak — ${band.name}`}
+                    className="h-full w-full"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 </div>
-                {review.text && (
-                  <p className="text-sm leading-relaxed text-stone-700">
-                    {review.text}
-                  </p>
-                )}
-                {review.bandReply && (
-                  <div className="rounded-md bg-stone-50 p-3">
-                    <p className="text-xs font-medium text-stone-500">
-                      Odgovor benda
-                    </p>
-                    <p className="mt-1 text-sm text-stone-700">
-                      {review.bandReply}
-                    </p>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {band.photos.length > 0 && (
+          <section className="space-y-6">
+            <SectionTitle eyebrow="Galerija" title="Sa pravih svadbi" />
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+              {band.photos.map((photo) => (
+                <div
+                  key={photo.id}
+                  className="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-soft"
+                >
+                  <Image
+                    src={photo.path}
+                    alt={`Fotografija — ${band.name}`}
+                    fill
+                    sizes="(max-width: 640px) 50vw, 320px"
+                    className="object-cover transition duration-500 group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {band.description && (
+          <section className="space-y-6">
+            <SectionTitle eyebrow="O bendu" title="Ko su oni" />
+            <p className="max-w-3xl text-base leading-relaxed whitespace-pre-line text-stone-600">
+              {band.description}
+            </p>
+          </section>
+        )}
+
+        {band.reviews.length > 0 && (
+          <section className="space-y-6">
+            <SectionTitle eyebrow="Recenzije" title="Šta kažu parovi" />
+            <ul className="grid gap-5 sm:grid-cols-2">
+              {band.reviews.map((review) => (
+                <li
+                  key={review.id}
+                  className="space-y-3 rounded-2xl border border-stone-200/70 bg-white p-6 shadow-soft"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span
+                      className="text-gold"
+                      aria-label={`Ocena ${review.rating} od 5`}
+                    >
+                      {"★".repeat(review.rating)}
+                      <span className="text-stone-200">
+                        {"★".repeat(5 - review.rating)}
+                      </span>
+                    </span>
+                    <span className="text-xs text-stone-400">
+                      {review.createdAt.toLocaleDateString("sr-Latn-BA")}
+                    </span>
                   </div>
-                )}
-              </li>
-            ))}
-          </ul>
+                  {review.text && (
+                    <p className="text-sm leading-relaxed text-stone-600">
+                      „{review.text}“
+                    </p>
+                  )}
+                  <p className="text-xs font-medium text-stone-400">
+                    — {review.inquiry.clientName}
+                  </p>
+                  {review.bandReply && (
+                    <div className="rounded-xl bg-gold-soft/60 p-3">
+                      <p className="text-[11px] font-semibold tracking-wide text-gold-dark uppercase">
+                        Odgovor benda
+                      </p>
+                      <p className="mt-1 text-sm text-stone-600">
+                        {review.bandReply}
+                      </p>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* Završni CTA */}
+        <section className="overflow-hidden rounded-3xl bg-ink px-6 py-12 text-center shadow-lift sm:px-12">
+          <p className="text-[11px] font-semibold tracking-[0.22em] text-gold uppercase">
+            Tvoj datum se brzo popunjava
+          </p>
+          <h2 className="mx-auto mt-3 max-w-lg font-display text-3xl font-semibold text-white">
+            Pitaj {band.name} da li je slobodan za tvoju svadbu
+          </h2>
+          <p className="mt-3 text-sm text-stone-400">
+            Bez registracije · bend ti se javlja direktno
+          </p>
+          <Link
+            href={`/bend/${band.slug}/upit`}
+            className={`mt-7 ${ui.btnGold}`}
+          >
+            Pošalji upit · {formatPriceRange(band.priceFrom, band.priceTo)}
+          </Link>
         </section>
-      )}
+      </div>
 
       {/* Lepljivo dugme na mobilnom — prioritet je konverzija ka upitu */}
-      <div className="fixed inset-x-0 bottom-0 border-t border-stone-200 bg-white p-3 sm:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-stone-200/60 bg-white/85 p-3 backdrop-blur-xl sm:hidden">
         <Link
           href={`/bend/${band.slug}/upit`}
-          className="block rounded-md bg-stone-900 px-5 py-3 text-center text-sm font-medium text-white"
+          className={`w-full ${ui.btnGold}`}
         >
-          Pošalji upit · {`od ${formatKM(band.priceFrom)}`}
+          Pošalji upit · od {formatKM(band.priceFrom)}
         </Link>
       </div>
     </main>

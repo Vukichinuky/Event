@@ -21,7 +21,7 @@ export default async function BendUpitiPage() {
   const { band } = await requireBand();
   if (!band) {
     return (
-      <p className="rounded-xl border border-dashed border-stone-300 bg-white p-8 text-center text-sm text-stone-500">
+      <p className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-10 text-center text-sm text-stone-500">
         Prvo napravi profil benda — upiti stižu na profil.
       </p>
     );
@@ -34,10 +34,10 @@ export default async function BendUpitiPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold text-stone-900">Upiti</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Upiti</h1>
 
       {inquiries.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-stone-300 bg-white p-8 text-center text-sm text-stone-500">
+        <p className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-10 text-center text-sm text-stone-500">
           Još nema upita. Kad par pošalje upit, stiže ti mejl i pojavljuje se
           ovde sa kontaktom para.
         </p>
@@ -46,7 +46,7 @@ export default async function BendUpitiPage() {
           {inquiries.map((inquiry) => (
             <li
               key={inquiry.id}
-              className="space-y-3 rounded-xl border border-stone-200 bg-white p-4"
+              className="space-y-3 rounded-2xl border border-stone-200/70 bg-white shadow-soft p-4"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="font-medium text-stone-900">
@@ -73,7 +73,7 @@ export default async function BendUpitiPage() {
               </div>
 
               {inquiry.message && (
-                <p className="whitespace-pre-line rounded-md bg-stone-50 p-3 text-sm text-stone-700">
+                <p className="whitespace-pre-line rounded-xl bg-cream/80 p-3.5 text-sm text-stone-600">
                   {inquiry.message}
                 </p>
               )}
@@ -86,7 +86,7 @@ export default async function BendUpitiPage() {
                   <form
                     action={respondToInquiry.bind(null, inquiry.id, "ACCEPTED")}
                   >
-                    <button className="rounded-md bg-green-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-800">
+                    <button className="cursor-pointer rounded-full bg-green-700 px-4 py-1.5 text-xs font-semibold text-white transition hover:bg-green-800">
                       Prihvati
                     </button>
                   </form>
@@ -95,7 +95,7 @@ export default async function BendUpitiPage() {
                   <form
                     action={respondToInquiry.bind(null, inquiry.id, "DECLINED")}
                   >
-                    <button className="rounded-md border border-stone-300 px-3 py-1.5 text-xs font-medium text-stone-600 hover:bg-stone-100">
+                    <button className="cursor-pointer rounded-full border border-stone-300 px-4 py-1.5 text-xs font-medium text-stone-600 transition hover:border-stone-400 hover:bg-stone-50">
                       Odbij
                     </button>
                   </form>

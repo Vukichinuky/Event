@@ -36,7 +36,7 @@ export default async function UrediBendPage({
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-stone-900">{band.name}</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">{band.name}</h1>
         <span className="text-sm text-stone-500">
           /bend/{band.slug} · {band.user?.email ?? "siroče profil (bez naloga)"}
         </span>
@@ -54,15 +54,15 @@ export default async function UrediBendPage({
       <BandMedia band={band} />
 
       {/* Vlasništvo profila — dodela / skidanje bend naloga */}
-      <section className="space-y-3 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="font-semibold text-stone-900">Nalog benda</h2>
+      <section className="space-y-3 rounded-2xl border border-stone-200/70 bg-white shadow-soft p-6">
+        <h2 className="font-display text-lg font-semibold tracking-tight text-ink">Nalog benda</h2>
         {band.user ? (
           <div className="flex items-center gap-3 text-sm">
             <span className="text-stone-600">
               Profil vodi: <strong>{band.user.email}</strong>
             </span>
             <form action={unassignBandUser.bind(null, band.id)}>
-              <button className="text-xs text-red-600 hover:underline">
+              <button className="cursor-pointer text-xs font-medium text-red-700/80 underline-offset-2 transition hover:text-red-700 hover:underline">
                 Skini nalog (vrati u siroče)
               </button>
             </form>
@@ -83,9 +83,9 @@ export default async function UrediBendPage({
                 type="email"
                 required
                 placeholder="email bend naloga"
-                className="flex-1 rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-stone-500 focus:outline-none"
+                className="flex-1 rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm transition focus:border-gold focus:outline-none focus:ring-4 focus:ring-gold/15"
               />
-              <button className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700">
+              <button className="cursor-pointer rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-px hover:bg-stone-800">
                 Dodeli
               </button>
             </form>
@@ -96,7 +96,7 @@ export default async function UrediBendPage({
       <form action={deleteBand.bind(null, band.id)}>
         <button
           type="submit"
-          className="text-sm text-red-600 underline hover:text-red-800"
+          className="cursor-pointer text-sm font-medium text-red-700/80 underline-offset-2 transition hover:text-red-700 hover:underline"
         >
           Obriši bend
         </button>

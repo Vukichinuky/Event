@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ui } from "@/lib/ui";
 import type { Band, Video, Photo } from "@/generated/prisma/client";
 import {
   addVideo,
@@ -11,7 +12,15 @@ import {
 } from "@/app/admin/bendovi/media-actions";
 
 const smallButton =
-  "rounded border border-stone-300 px-2 py-1 text-xs text-stone-600 hover:bg-stone-100";
+  "cursor-pointer rounded-full border border-stone-200 px-2.5 py-1 text-xs text-stone-500 transition hover:border-stone-400 hover:text-ink disabled:opacity-30";
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="font-display text-lg font-semibold tracking-tight text-ink">
+      {children}
+    </h2>
+  );
+}
 
 // Uređivanje snimaka, naslovne i galerije — dele ga admin i bend panel
 export function BandMedia({
@@ -22,8 +31,8 @@ export function BandMedia({
   return (
     <>
       {/* Snimci — video je proizvod, prva stvar na profilu */}
-      <section className="space-y-3 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="font-semibold text-stone-900">Snimci</h2>
+      <section className={`space-y-4 ${ui.card} p-6 sm:p-8`}>
+        <SectionHeading>Snimci</SectionHeading>
         {band.videos.length === 0 ? (
           <p className="text-sm text-stone-500">
             Još nema snimaka. Snimak je prva stvar koju par gleda — dodaj bar
@@ -34,16 +43,16 @@ export function BandMedia({
             {band.videos.map((video, i) => (
               <li
                 key={video.id}
-                className="flex items-center gap-2 rounded-md border border-stone-200 px-3 py-2 text-sm"
+                className="flex items-center gap-2.5 rounded-xl border border-stone-200/80 bg-cream/60 px-4 py-2.5 text-sm"
               >
-                <span className="rounded bg-stone-100 px-1.5 py-0.5 text-xs text-stone-600">
+                <span className="rounded-full bg-white px-2.5 py-0.5 text-xs font-medium text-stone-500 shadow-[0_1px_2px_rgb(27_21_15/0.05)]">
                   {video.platform === "YOUTUBE" ? "YouTube" : "Instagram"}
                 </span>
                 <a
                   href={video.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="min-w-0 flex-1 truncate text-stone-700 underline-offset-2 hover:underline"
+                  className="min-w-0 flex-1 truncate text-stone-600 underline-offset-2 hover:underline"
                 >
                   {video.url}
                 </a>
@@ -61,34 +70,33 @@ export function BandMedia({
                   </button>
                 </form>
                 <form action={deleteVideo.bind(null, band.id, video.id)}>
-                  <button className="text-xs text-red-600 hover:underline">
-                    Obriši
-                  </button>
+                  <button className={ui.btnDangerLink}>Obriši</button>
                 </form>
               </li>
             ))}
           </ul>
         )}
-        <form action={addVideo.bind(null, band.id)} className="flex gap-2">
+        <form
+          action={addVideo.bind(null, band.id)}
+          className="flex flex-col gap-2 sm:flex-row"
+        >
           <input
             name="url"
             type="url"
             required
             placeholder="https://www.youtube.com/watch?v=… ili Instagram link"
-            className="flex-1 rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-stone-500 focus:outline-none"
+            className={ui.input}
           />
-          <button className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700">
-            Dodaj snimak
-          </button>
+          <button className={`shrink-0 ${ui.btnPrimary}`}>Dodaj snimak</button>
         </form>
       </section>
 
       {/* Naslovna slika */}
-      <section className="space-y-3 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="font-semibold text-stone-900">Naslovna slika</h2>
+      <section className={`space-y-4 ${ui.card} p-6 sm:p-8`}>
+        <SectionHeading>Naslovna slika</SectionHeading>
         {band.coverImage ? (
           <div className="flex items-start gap-4">
-            <div className="relative h-32 w-48 overflow-hidden rounded-md">
+            <div className="relative h-32 w-48 overflow-hidden rounded-xl shadow-soft">
               <Image
                 src={band.coverImage}
                 alt={`Naslovna slika — ${band.name}`}
@@ -98,42 +106,38 @@ export function BandMedia({
               />
             </div>
             <form action={removeCover.bind(null, band.id)}>
-              <button className="text-xs text-red-600 hover:underline">
-                Ukloni
-              </button>
+              <button className={ui.btnDangerLink}>Ukloni</button>
             </form>
           </div>
         ) : (
           <p className="text-sm text-stone-500">
-            Bez naslovne slike kartica benda dobija sivi placeholder.
+            Bez naslovne slike kartica benda dobija zlatni placeholder.
           </p>
         )}
         <form
           action={uploadCover.bind(null, band.id)}
-          className="flex items-center gap-2"
+          className="flex flex-wrap items-center gap-3"
         >
           <input
             name="cover"
             type="file"
             required
             accept="image/jpeg,image/png,image/webp"
-            className="text-sm text-stone-600"
+            className="text-sm text-stone-500 file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-gold-soft file:px-4 file:py-2 file:text-sm file:font-medium file:text-gold-dark"
           />
-          <button className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700">
-            Postavi
-          </button>
+          <button className={ui.btnPrimary}>Postavi</button>
         </form>
         <p className="text-xs text-stone-400">JPG, PNG ili WebP, do 5 MB.</p>
       </section>
 
       {/* Galerija */}
-      <section className="space-y-3 rounded-xl border border-stone-200 bg-white p-6">
-        <h2 className="font-semibold text-stone-900">Galerija</h2>
+      <section className={`space-y-4 ${ui.card} p-6 sm:p-8`}>
+        <SectionHeading>Galerija</SectionHeading>
         {band.photos.length > 0 && (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             {band.photos.map((photo) => (
-              <div key={photo.id} className="space-y-1">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-md">
+              <div key={photo.id} className="space-y-1.5">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-xl shadow-soft">
                   <Image
                     src={photo.path}
                     alt={`Fotografija — ${band.name}`}
@@ -143,9 +147,7 @@ export function BandMedia({
                   />
                 </div>
                 <form action={deletePhoto.bind(null, band.id, photo.id)}>
-                  <button className="text-xs text-red-600 hover:underline">
-                    Obriši
-                  </button>
+                  <button className={ui.btnDangerLink}>Obriši</button>
                 </form>
               </div>
             ))}
@@ -153,7 +155,7 @@ export function BandMedia({
         )}
         <form
           action={uploadPhotos.bind(null, band.id)}
-          className="flex items-center gap-2"
+          className="flex flex-wrap items-center gap-3"
         >
           <input
             name="photos"
@@ -161,11 +163,9 @@ export function BandMedia({
             required
             multiple
             accept="image/jpeg,image/png,image/webp"
-            className="text-sm text-stone-600"
+            className="text-sm text-stone-500 file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-gold-soft file:px-4 file:py-2 file:text-sm file:font-medium file:text-gold-dark"
           />
-          <button className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700">
-            Dodaj slike
-          </button>
+          <button className={ui.btnPrimary}>Dodaj slike</button>
         </form>
         <p className="text-xs text-stone-400">
           Više slika odjednom; JPG, PNG ili WebP, do 5 MB po slici.

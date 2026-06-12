@@ -19,7 +19,7 @@ export default async function BendRecenzijePage() {
   const { band } = await requireBand();
   if (!band) {
     return (
-      <p className="rounded-xl border border-dashed border-stone-300 bg-white p-8 text-center text-sm text-stone-500">
+      <p className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-10 text-center text-sm text-stone-500">
         Prvo napravi profil benda.
       </p>
     );
@@ -33,10 +33,10 @@ export default async function BendRecenzijePage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold text-stone-900">Recenzije</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Recenzije</h1>
 
       {reviews.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-stone-300 bg-white p-8 text-center text-sm text-stone-500">
+        <p className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-10 text-center text-sm text-stone-500">
           Još nema recenzija. Posle svake odsvirane svadbe par dobija link za
           recenziju preko svog upita — svaka objavljena recenzija ti diže
           profil.
@@ -46,11 +46,11 @@ export default async function BendRecenzijePage() {
           {reviews.map((review) => (
             <li
               key={review.id}
-              className="space-y-3 rounded-xl border border-stone-200 bg-white p-4"
+              className="space-y-3 rounded-2xl border border-stone-200/70 bg-white shadow-soft p-4"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="text-sm">
-                  <span className="text-amber-500">
+                  <span className="text-gold">
                     {"★".repeat(review.rating)}
                     <span className="text-stone-300">
                       {"★".repeat(5 - review.rating)}
@@ -74,7 +74,7 @@ export default async function BendRecenzijePage() {
 
               {review.status === "APPROVED" &&
                 (review.bandReply ? (
-                  <div className="rounded-md bg-stone-50 p-3">
+                  <div className="rounded-xl bg-cream/80 p-3.5">
                     <p className="text-xs font-medium text-stone-500">
                       Tvoj javni odgovor
                     </p>
@@ -92,9 +92,9 @@ export default async function BendRecenzijePage() {
                       required
                       maxLength={1000}
                       placeholder="Javni odgovor (npr. zahvalnica paru)"
-                      className="flex-1 rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-stone-500 focus:outline-none"
+                      className="flex-1 rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm transition focus:border-gold focus:outline-none focus:ring-4 focus:ring-gold/15"
                     />
-                    <button className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700">
+                    <button className="cursor-pointer rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-px hover:bg-stone-800">
                       Odgovori
                     </button>
                   </form>

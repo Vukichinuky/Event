@@ -1,10 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import { ui } from "@/lib/ui";
 import { submitInquiry, type InquiryFormState } from "./actions";
-
-const inputClass =
-  "w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-stone-500 focus:outline-none";
 
 export function InquiryForm({
   slug,
@@ -19,9 +17,9 @@ export function InquiryForm({
   >(submitInquiry.bind(null, slug), { error: null });
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form action={formAction} className="space-y-5">
       {state.error && (
-        <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded-xl border border-red-100 bg-red-50 p-3.5 text-sm text-red-700">
           {state.error}
         </p>
       )}
@@ -32,9 +30,9 @@ export function InquiryForm({
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1">
-          <label htmlFor="eventDate" className="text-sm font-medium text-stone-700">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <label htmlFor="eventDate" className={ui.label}>
             Datum svadbe *
           </label>
           <input
@@ -43,11 +41,11 @@ export function InquiryForm({
             type="date"
             required
             min={minDate}
-            className={inputClass}
+            className={ui.input}
           />
         </div>
-        <div className="space-y-1">
-          <label htmlFor="eventCity" className="text-sm font-medium text-stone-700">
+        <div className="space-y-1.5">
+          <label htmlFor="eventCity" className={ui.label}>
             Mesto svadbe *
           </label>
           <input
@@ -56,13 +54,13 @@ export function InquiryForm({
             required
             minLength={2}
             placeholder="npr. Zvornik"
-            className={inputClass}
+            className={ui.input}
           />
         </div>
       </div>
 
-      <div className="space-y-1">
-        <label htmlFor="guestCount" className="text-sm font-medium text-stone-700">
+      <div className="space-y-1.5">
+        <label htmlFor="guestCount" className={ui.label}>
           Okvirni broj gostiju
         </label>
         <input
@@ -71,12 +69,12 @@ export function InquiryForm({
           type="number"
           min={1}
           placeholder="npr. 200"
-          className={inputClass}
+          className={ui.input}
         />
       </div>
 
-      <div className="space-y-1">
-        <label htmlFor="message" className="text-sm font-medium text-stone-700">
+      <div className="space-y-1.5">
+        <label htmlFor="message" className={ui.label}>
           Poruka bendu
         </label>
         <textarea
@@ -85,13 +83,15 @@ export function InquiryForm({
           rows={4}
           maxLength={2000}
           placeholder="Sala, satnica, posebne želje…"
-          className={inputClass}
+          className={ui.input}
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="space-y-1">
-          <label htmlFor="clientName" className="text-sm font-medium text-stone-700">
+      <div className="h-px bg-stone-100" />
+
+      <div className="grid gap-5 sm:grid-cols-3">
+        <div className="space-y-1.5">
+          <label htmlFor="clientName" className={ui.label}>
             Tvoje ime *
           </label>
           <input
@@ -100,11 +100,11 @@ export function InquiryForm({
             required
             minLength={2}
             autoComplete="name"
-            className={inputClass}
+            className={ui.input}
           />
         </div>
-        <div className="space-y-1">
-          <label htmlFor="phone" className="text-sm font-medium text-stone-700">
+        <div className="space-y-1.5">
+          <label htmlFor="phone" className={ui.label}>
             Telefon *
           </label>
           <input
@@ -115,11 +115,11 @@ export function InquiryForm({
             minLength={6}
             autoComplete="tel"
             placeholder="+387 6x xxx xxx"
-            className={inputClass}
+            className={ui.input}
           />
         </div>
-        <div className="space-y-1">
-          <label htmlFor="email" className="text-sm font-medium text-stone-700">
+        <div className="space-y-1.5">
+          <label htmlFor="email" className={ui.label}>
             Email *
           </label>
           <input
@@ -128,7 +128,7 @@ export function InquiryForm({
             type="email"
             required
             autoComplete="email"
-            className={inputClass}
+            className={ui.input}
           />
         </div>
       </div>
@@ -136,7 +136,7 @@ export function InquiryForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-md bg-stone-900 px-5 py-3 text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-60 sm:w-auto"
+        className={`w-full sm:w-auto ${ui.btnGold}`}
       >
         {pending ? "Slanje…" : "Pošalji upit"}
       </button>

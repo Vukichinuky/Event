@@ -1,10 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import { ui } from "@/lib/ui";
 import { registerBand, type RegisterState } from "./actions";
-
-const inputClass =
-  "w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-stone-500 focus:outline-none";
 
 export function RegisterForm() {
   const [state, formAction, pending] = useActionState<RegisterState, FormData>(
@@ -13,15 +11,15 @@ export function RegisterForm() {
   );
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form action={formAction} className="space-y-5">
       {state.error && (
-        <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded-xl border border-red-100 bg-red-50 p-3.5 text-sm text-red-700">
           {state.error}
         </p>
       )}
 
-      <div className="space-y-1">
-        <label htmlFor="email" className="text-sm font-medium text-stone-700">
+      <div className="space-y-1.5">
+        <label htmlFor="email" className={ui.label}>
           Email benda
         </label>
         <input
@@ -30,7 +28,7 @@ export function RegisterForm() {
           type="email"
           required
           autoComplete="email"
-          className={inputClass}
+          className={ui.input}
         />
         <p className="text-xs text-stone-400">
           Ako ti je admin već napravio profil sa ovim mejlom, automatski ga
@@ -38,11 +36,8 @@ export function RegisterForm() {
         </p>
       </div>
 
-      <div className="space-y-1">
-        <label
-          htmlFor="password"
-          className="text-sm font-medium text-stone-700"
-        >
+      <div className="space-y-1.5">
+        <label htmlFor="password" className={ui.label}>
           Lozinka
         </label>
         <input
@@ -52,21 +47,24 @@ export function RegisterForm() {
           required
           minLength={8}
           autoComplete="new-password"
-          className={inputClass}
+          className={ui.input}
         />
       </div>
 
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-60"
+        className={`w-full ${ui.btnPrimary}`}
       >
         {pending ? "Registracija…" : "Registruj se"}
       </button>
 
       <p className="text-center text-sm text-stone-500">
         Već imaš nalog?{" "}
-        <a href="/prijava" className="underline">
+        <a
+          href="/prijava"
+          className="font-medium text-gold-dark underline-offset-4 hover:underline"
+        >
           Prijavi se
         </a>
       </p>

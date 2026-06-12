@@ -54,7 +54,7 @@ export default async function UpitiPage({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold text-stone-900">Upiti</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Upiti</h1>
 
       <div className="flex flex-wrap gap-2 text-sm">
         {FILTERS.map((f) => (
@@ -63,8 +63,8 @@ export default async function UpitiPage({
             href={f.value ? `/admin/upiti?status=${f.value}` : "/admin/upiti"}
             className={
               (f.value || "") === (statusFilter ?? "")
-                ? "rounded-full bg-stone-900 px-3 py-1 text-white"
-                : "rounded-full border border-stone-300 bg-white px-3 py-1 text-stone-600 hover:bg-stone-100"
+                ? "rounded-full bg-ink px-3.5 py-1 font-medium text-white shadow-soft"
+                : "rounded-full border border-stone-300 bg-white px-3.5 py-1 text-stone-600 transition hover:border-stone-400 hover:bg-stone-50"
             }
           >
             {f.label}
@@ -73,11 +73,11 @@ export default async function UpitiPage({
       </div>
 
       {inquiries.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-stone-300 bg-white p-8 text-center text-sm text-stone-500">
+        <p className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-10 text-center text-sm text-stone-500">
           Nema upita za izabrani filter.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-stone-200 bg-white">
+        <div className="overflow-x-auto rounded-2xl border border-stone-200/70 bg-white shadow-soft">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-stone-200 text-stone-500">
               <tr>

@@ -16,22 +16,22 @@ export default async function BendoviPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-stone-900">Bendovi</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Bendovi</h1>
         <Link
           href="/admin/bendovi/novi"
-          className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700"
+          className="cursor-pointer rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-px hover:bg-stone-800"
         >
           + Novi bend
         </Link>
       </div>
 
       {bands.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-stone-300 bg-white p-8 text-center text-sm text-stone-500">
+        <p className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-10 text-center text-sm text-stone-500">
           Još nema bendova. Dodaj prvi bend — može i kao „siroče“ profil, pre
           nego što bend ima svoj nalog.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-stone-200 bg-white">
+        <div className="overflow-x-auto rounded-2xl border border-stone-200/70 bg-white shadow-soft">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-stone-200 text-stone-500">
               <tr>

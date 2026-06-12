@@ -20,7 +20,7 @@ export default async function BendProfilPage({
 
   if (!ownBand) {
     return (
-      <p className="rounded-xl border border-dashed border-stone-300 bg-white p-8 text-center text-sm text-stone-500">
+      <p className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-10 text-center text-sm text-stone-500">
         Još nemaš profil — napravi ga na početnoj strani panela.
       </p>
     );
@@ -42,7 +42,7 @@ export default async function BendProfilPage({
   return (
     <div className="space-y-8">
       <div className="space-y-1">
-        <h1 className="text-xl font-semibold text-stone-900">Moj profil</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Moj profil</h1>
         <p className="text-sm text-stone-500">{STATUS_NOTE[band.status]}</p>
       </div>
 

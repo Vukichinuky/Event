@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { ui } from "@/lib/ui";
 import { submitReview, type ReviewFormState } from "./actions";
 
 export function ReviewForm({ token }: { token: string }) {
@@ -10,22 +11,20 @@ export function ReviewForm({ token }: { token: string }) {
   );
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form action={formAction} className="space-y-6">
       {state.error && (
-        <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded-xl border border-red-100 bg-red-50 p-3.5 text-sm text-red-700">
           {state.error}
         </p>
       )}
 
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium text-stone-700">
-          Ocena *
-        </legend>
-        <div className="flex gap-3">
+      <fieldset className="space-y-2.5">
+        <legend className={ui.label}>Ocena *</legend>
+        <div className="flex gap-2.5">
           {[1, 2, 3, 4, 5].map((value) => (
             <label
               key={value}
-              className="flex cursor-pointer flex-col items-center gap-1 rounded-md border border-stone-200 px-3 py-2 text-sm has-checked:border-stone-900 has-checked:bg-stone-900 has-checked:text-white"
+              className="flex h-14 w-14 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-2xl border border-stone-200 bg-white text-sm shadow-soft transition duration-200 hover:-translate-y-0.5 hover:border-gold has-checked:border-gold has-checked:bg-gold has-checked:text-white has-checked:shadow-lift"
             >
               <input
                 type="radio"
@@ -34,15 +33,17 @@ export function ReviewForm({ token }: { token: string }) {
                 required
                 className="sr-only"
               />
-              <span className="text-base">{value}</span>
-              <span aria-hidden>★</span>
+              <span className="font-semibold">{value}</span>
+              <span aria-hidden className="text-xs">
+                ★
+              </span>
             </label>
           ))}
         </div>
       </fieldset>
 
-      <div className="space-y-1">
-        <label htmlFor="text" className="text-sm font-medium text-stone-700">
+      <div className="space-y-1.5">
+        <label htmlFor="text" className={ui.label}>
           Kako je bilo?
         </label>
         <textarea
@@ -51,15 +52,11 @@ export function ReviewForm({ token }: { token: string }) {
           rows={5}
           maxLength={2000}
           placeholder="Atmosfera, repertoar, dogovor — šta bi rekao paru koji bira bend?"
-          className="w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-stone-500 focus:outline-none"
+          className={ui.input}
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-md bg-stone-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-60"
-      >
+      <button type="submit" disabled={pending} className={ui.btnGold}>
         {pending ? "Slanje…" : "Pošalji recenziju"}
       </button>
       <p className="text-xs text-stone-400">

@@ -21,7 +21,7 @@ export default async function KalendarPage({
   const { band } = await requireBand();
   if (!band) {
     return (
-      <p className="rounded-xl border border-dashed border-stone-300 bg-white p-8 text-center text-sm text-stone-500">
+      <p className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-10 text-center text-sm text-stone-500">
         Prvo napravi profil benda — kalendar ide uz profil.
       </p>
     );
@@ -50,7 +50,7 @@ export default async function KalendarPage({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-stone-900">
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">
           Kalendar dostupnosti
         </h1>
         <div className="flex items-center gap-2 text-sm">
@@ -77,7 +77,7 @@ export default async function KalendarPage({
         Datumi prihvaćenih svadbi se blokiraju automatski.
       </p>
 
-      <div className="overflow-hidden rounded-xl border border-stone-200 bg-white p-4">
+      <div className="overflow-hidden rounded-2xl border border-stone-200/70 bg-white shadow-soft p-4">
         <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-stone-400">
           {DAY_NAMES.map((d) => (
             <div key={d} className="py-1">
@@ -94,14 +94,14 @@ export default async function KalendarPage({
                 const reason = byDate.get(iso);
                 const isPast = iso < todayISO;
                 const base =
-                  "flex h-12 w-full items-center justify-center rounded-md text-sm";
+                  "flex h-12 w-full items-center justify-center rounded-xl text-sm transition";
 
                 if (reason === "BOOKED") {
                   return (
                     <div
                       key={di}
                       title="Rezervisano preko upita — oslobađa se odbijanjem upita"
-                      className={`${base} bg-green-700 font-medium text-white`}
+                      className={`${base} bg-green-700 font-semibold text-white shadow-soft`}
                     >
                       {day.getUTCDate()}
                     </div>
@@ -122,8 +122,8 @@ export default async function KalendarPage({
                     <button
                       className={
                         reason === "MANUAL"
-                          ? `${base} bg-stone-800 font-medium text-white hover:bg-stone-600`
-                          : `${base} border border-stone-200 text-stone-700 hover:bg-stone-100`
+                          ? `${base} bg-ink font-semibold text-white shadow-soft hover:bg-stone-700`
+                          : `${base} cursor-pointer border border-stone-200 bg-white text-stone-600 hover:border-gold hover:text-ink`
                       }
                     >
                       {day.getUTCDate()}
@@ -142,7 +142,7 @@ export default async function KalendarPage({
           slobodno
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded bg-stone-800" />
+          <span className="inline-block h-3 w-3 rounded bg-ink" />
           zauzeto (ručno)
         </span>
         <span className="flex items-center gap-1.5">

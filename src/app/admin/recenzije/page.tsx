@@ -46,7 +46,7 @@ export default async function AdminRecenzijePage({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold text-stone-900">Recenzije</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Recenzije</h1>
 
       <div className="flex flex-wrap gap-2 text-sm">
         {FILTERS.map((f) => (
@@ -59,8 +59,8 @@ export default async function AdminRecenzijePage({
             }
             className={
               (f.value || "") === (statusFilter ?? "")
-                ? "rounded-full bg-stone-900 px-3 py-1 text-white"
-                : "rounded-full border border-stone-300 bg-white px-3 py-1 text-stone-600 hover:bg-stone-100"
+                ? "rounded-full bg-ink px-3.5 py-1 font-medium text-white shadow-soft"
+                : "rounded-full border border-stone-300 bg-white px-3.5 py-1 text-stone-600 transition hover:border-stone-400 hover:bg-stone-50"
             }
           >
             {f.label}
@@ -69,7 +69,7 @@ export default async function AdminRecenzijePage({
       </div>
 
       {reviews.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-stone-300 bg-white p-8 text-center text-sm text-stone-500">
+        <p className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-10 text-center text-sm text-stone-500">
           Nema recenzija za izabrani filter.
         </p>
       ) : (
@@ -77,7 +77,7 @@ export default async function AdminRecenzijePage({
           {reviews.map((review) => (
             <li
               key={review.id}
-              className="space-y-3 rounded-xl border border-stone-200 bg-white p-4"
+              className="space-y-3 rounded-2xl border border-stone-200/70 bg-white shadow-soft p-4"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="text-sm">
@@ -87,7 +87,7 @@ export default async function AdminRecenzijePage({
                   >
                     {review.band.name}
                   </Link>{" "}
-                  <span className="text-amber-500">
+                  <span className="text-gold">
                     {"★".repeat(review.rating)}
                     <span className="text-stone-300">
                       {"★".repeat(5 - review.rating)}
@@ -111,7 +111,7 @@ export default async function AdminRecenzijePage({
                 <p className="text-sm text-stone-700">{review.text}</p>
               )}
               {review.bandReply && (
-                <p className="rounded-md bg-stone-50 p-2 text-sm text-stone-600">
+                <p className="rounded-xl bg-cream/80 p-3 text-sm text-stone-600">
                   Odgovor benda: {review.bandReply}
                 </p>
               )}
@@ -121,7 +121,7 @@ export default async function AdminRecenzijePage({
                   <form
                     action={moderateReview.bind(null, review.id, "APPROVED")}
                   >
-                    <button className="rounded-md bg-green-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-800">
+                    <button className="cursor-pointer rounded-full bg-green-700 px-4 py-1.5 text-xs font-semibold text-white transition hover:bg-green-800">
                       Odobri
                     </button>
                   </form>
@@ -130,7 +130,7 @@ export default async function AdminRecenzijePage({
                   <form
                     action={moderateReview.bind(null, review.id, "REJECTED")}
                   >
-                    <button className="rounded-md border border-stone-300 px-3 py-1.5 text-xs font-medium text-stone-600 hover:bg-stone-100">
+                    <button className="cursor-pointer rounded-full border border-stone-300 px-4 py-1.5 text-xs font-medium text-stone-600 transition hover:border-stone-400 hover:bg-stone-50">
                       Odbij
                     </button>
                   </form>
