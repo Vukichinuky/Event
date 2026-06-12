@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireBand } from "@/lib/require-auth";
 import { BandForm } from "@/app/admin/bendovi/band-form";
 import { createOwnBand } from "./actions";
+import { CopyField } from "@/components/copy-field";
 
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
@@ -101,6 +102,22 @@ export default async function DashboardPage({
           </div>
         ))}
       </div>
+
+      {/* viralni mehanizam: bend deli link umesto da šalje snimke ručno */}
+      {band.status === "PUBLISHED" && (
+        <section className="space-y-3 rounded-2xl border border-stone-200/70 bg-white p-6 shadow-soft">
+          <h2 className="font-display text-lg font-semibold tracking-tight text-ink">
+            Podeli svoj profil
+          </h2>
+          <p className="text-sm text-stone-500">
+            Umesto da svaki put šalješ snimke — pošalji jedan link. Svaki par
+            koji ga otvori je potencijalni upit.
+          </p>
+          <CopyField
+            value={`${process.env.SITE_URL ?? "http://localhost:3000"}/bend/${band.slug}`}
+          />
+        </section>
+      )}
 
       <section className="space-y-3">
         <h2 className="font-display text-lg font-semibold tracking-tight text-ink">Poslednji upiti</h2>

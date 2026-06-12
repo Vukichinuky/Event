@@ -67,6 +67,8 @@ model Band {
   coverImage   String?
   status       BandStatus @default(DRAFT)
   viewCount    Int        @default(0)
+  // tajni token za .ics feed kalendara (pretplata sa telefona)
+  calendarToken String    @unique @default(cuid())
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 

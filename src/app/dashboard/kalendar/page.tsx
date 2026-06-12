@@ -10,6 +10,7 @@ import {
   MONTH_NAMES,
 } from "@/lib/calendar";
 import { toggleUnavailableDate } from "../actions";
+import { CopyField } from "@/components/copy-field";
 
 const DAY_NAMES = ["Pon", "Uto", "Sre", "Čet", "Pet", "Sub", "Ned"];
 
@@ -150,6 +151,25 @@ export default async function KalendarPage({
           rezervisano preko upita
         </span>
       </div>
+
+      {/* .ics pretplata — kalendar na telefonu se sam ažurira */}
+      <section className="space-y-3 rounded-2xl border border-stone-200/70 bg-white p-6 shadow-soft">
+        <h2 className="font-display text-lg font-semibold tracking-tight text-ink">
+          Kalendar na telefonu
+        </h2>
+        <p className="text-sm text-stone-500">
+          Pretplati svoj Google ili Apple kalendar na ovaj link — svadbe i
+          zauzeti dani će se sami pojavljivati na telefonu.
+        </p>
+        <CopyField
+          value={`${process.env.SITE_URL ?? "http://localhost:3000"}/api/kalendar/${band.calendarToken}.ics`}
+        />
+        <p className="text-xs text-stone-400">
+          Google kalendar: Podešavanja → Dodaj kalendar → Sa URL-a. iPhone:
+          Podešavanja → Kalendar → Nalozi → Dodaj pretplaćeni kalendar. Link je
+          tajan — ne deli ga javno.
+        </p>
+      </section>
     </div>
   );
 }

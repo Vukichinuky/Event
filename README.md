@@ -71,6 +71,14 @@ Primer crontab unosa:
 15 8 * * * curl -s -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/podsetnici
 ```
 
+## Should-have (posle lansiranja)
+
+- [x] `.ics` izvoz kalendara — bend se pretplati na
+      `/api/kalendar/<token>.ics` (tajni token po bendu); svadbe sa
+      detaljima para i ručni blokovi se sami pojavljuju na telefonu
+- [x] „Podeli svoj profil" u bend panelu (link + kopiranje)
+- [ ] Pretplata + naplata (mesec 6+, prvo ručno)
+
 ## Checklist za lansiranje
 
 1. `.env` na Mac Miniju: pravi `AUTH_SECRET`, `CRON_SECRET`, `SITE_URL`
